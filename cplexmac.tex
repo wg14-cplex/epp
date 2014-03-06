@@ -1,0 +1,12 @@
+\ifthenelse{\boolean{hidecpp}}
+{\let\cpp=\comment
+\let\endcpp=\endcomment
+\newcommand{\nocpp}[1]{#1}
+\newcommand{\yescpp}[1]{}
+}
+{\newenvironment{cpp}
+{\sffamily\slshape[C++:}
+{]}
+\newcommand{\nocpp}[1]{}
+\newcommand{\yescpp}[1]{#1}
+}

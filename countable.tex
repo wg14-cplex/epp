@@ -1,0 +1,507 @@
+\clause{Counted loops}
+\sclause{Introduction}
+A
+\defn{counted loop}
+is a
+\tcode{for}
+statement
+\begin{cpp}
+or range-based
+\tcode{for}
+statement
+\end{cpp}
+that is required to satisfy additional constraints.
+The purpose of these constraints is to ensure that
+the loop's iteration count can be computed
+before the loop body is executed.
+
+There shall be no
+\tcode{return},
+\tcode{break},
+\tcode{goto}
+or
+\tcode{switch}
+statement that might transfer control into or out of a counted loop.
+
+\sclause{Constraints on a counted \tcode{for} statement}
+\ssclause{Introduction}
+The syntax of a
+\tcode{for}
+statement includes three
+\defn{control clauses}
+between parentheses,
+separated by semicolons.
+The first of these is called the initialization clause;
+the second is called the condition clause or controlling expression;
+the third is called the
+\defn{loop-increment}.
+
+When a constraint limits the form of an expression,
+parentheses are allowed around the expression
+or any required subexpression.
+
+\ssclause{Constraints on the form of the control clauses}
+
+\begin{cpp}
+The
+\nonterminal{condition}
+shall be an expression.
+
+\begin{note}
+A condition with declaration form is useful
+in a context where a value carries more information
+than just whether it is zero or nonzero.
+This is not believed to be useful in a counted loop.
+\end{note}
+\end{cpp}
+
+The controlling expression shall be a comparison expression
+with one of the following forms:%
+\footnote{DFEP:
+OpenMP does not (yet) allow comparison with
+\tcode{!=}.
+}
+
+\begin{bnf}
+\br
+relational-expression \terminal{<} shift-expression
+\br
+relational-expression \terminal{>} shift-expression
+\br
+relational-expression \terminal{<=} shift-expression
+\br
+relational-expression \terminal{>=} shift-expression
+\br
+equality-expression \terminal{!=} relational-expression
+\end{bnf}
+
+Exactly one of the operands of the comparison operator
+shall be an identifier designating an induction variable,
+as described below.
+This induction variable is known as the
+\defn{control variable}.
+The operand that is not the control variable is called the
+\defn{limit expression}.
+\begin{cpp}
+Any implicit conversion applied to that operand is not considered
+part of the limit expression.
+\end{cpp}
+
+The loop-increment shall be an expression with the following form:%
+\footnote{DFEP:
+OpenMP and ``classic'' Cilk allow only a single induction variable:
+the loop control variable.
+Allowing multiple induction variables is implemented in Intel's compiler.
+}
+
+\begin{bnf}
+\nontermdef{loop-increment}
+\br
+single-increment
+\br
+loop-increment \terminal{,} single-increment
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{single-increment}
+\br
+identifier \terminal{++}
+\br
+identifier \terminal{--}
+\br
+\terminal{++} identifier
+\br
+\terminal{--} identifier
+\br
+identifier \terminal{+=} initializer-clause
+\br
+identifier \terminal{-=} initializer-clause
+\br
+identifier \terminal{=} identifier \terminal{+} multiplicative-expression
+\br
+identifier \terminal{=} identifier \terminal{-} multiplicative-expression
+\br
+identifier \terminal{=} additive-expression \terminal{+} identifier
+\end{bnf}
+
+\begin{cpp}
+Each comma in the grammar of loop-increment shall represent
+a use of the built-in comma operator.
+\end{cpp}
+The identifier in each grammatical alternative for single-increment
+names an
+\defn{induction variable}.
+If
+\grammarterm{identifier}
+occurs twice in a grammatical alternative for
+\grammarterm{single-increment},
+the same variable shall be named by both occurrences.
+If a grammatical alternative for
+\grammarterm{single-increment}
+contains a subexpression
+that is not an identifier for the induction variable,
+that is called the
+\defn{stride expression}
+for that induction variable.
+
+An induction variable shall not be designated by more than one
+\grammarterm{single-increment}.
+
+\begin{note}
+The control variable is identified by considering
+the loop's condition and loop-increment together.
+If exactly one operand of the condition comparison is a variable,
+it is the control variable, and must be incremented.
+If both operands of the condition comparison are variables,
+only one is allowed to be incremented;
+that one is the control variable.
+It is an error if neither operand of the condition comparison is a variable.
+\end{note}
+
+\begin{note}
+There is no additional constraint on the form
+of the initialization clause of a counted \tcode{for} loop.%
+\footnote{DFEP:
+OpenMP and ``classic'' Cilk require that the control variable be initialized.
+This relaxation is implemented in Intel's compiler.
+}
+\end{note}
+
+\ssclause{Other statically checkable constraints}
+
+Each induction variable shall have unqualified integral%
+\yescpp{,}
+\begin{cpp}
+enumeration,
+copy-constructible class,
+\end{cpp}
+or pointer type,
+and shall have automatic storage duration.
+
+Each stride expression shall have integral
+\begin{cpp}
+or enumeration
+\end{cpp}
+type.
+
+\newcommand{\MYin}{\hspace{0.1in}}
+\newcommand{\MYcolA}{0.7in}
+\newcommand{\MYcolB}{1.0in}
+\newcommand{\MYcolC}{1.3in}
+
+\begin{table}[ht]
+\caption{
+Method of computing the iteration count
+}
+\label{tab:itcount}
+\centering
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\parbox[c][30pt]{\MYcolA}{
+\bfseries
+Form of\\condition
+}&
+\multicolumn{4}{c|}{
+\bfseries
+Form of single-increment
+}
+\\ \hline &
+\parbox{\MYcolB}{
+\bfseries
+\grammarterm{id} \tcode{++}\\
+\tcode{++} \grammarterm{id}
+}&
+\parbox{\MYcolB}{
+\bfseries
+\grammarterm{id} \tcode{--}\\
+\tcode{--} \grammarterm{id}
+}&
+\parbox[c][40pt]{\MYcolC}{
+\bfseries
+\grammarterm{id} \tcode{+=} \grammarterm{stride}\\
+\grammarterm{id} \tcode{=} \grammarterm{id} \tcode{+} \grammarterm{stride}\\
+\grammarterm{id} \tcode{=} \grammarterm{stride}\tcode{+} \grammarterm{id}
+}&
+\parbox{\MYcolC}{
+\bfseries
+\grammarterm{id} \tcode{-=} \grammarterm{stride}\\
+\grammarterm{id} \tcode{=} \grammarterm{id} \tcode{-} \grammarterm{stride}
+}
+\\ \hline
+\parbox[c][30pt]{\MYcolA}{
+\bfseries
+\grammarterm{id} \tcode{<} \grammarterm{lim}\\
+\grammarterm{lim} \tcode{>} \grammarterm{id}
+}&
+$((lim)-(id))$&
+ERROR&
+\parbox{\MYcolC}{
+$((lim)-(id)-1)/$\\
+\MYin$(stride)+1$
+}&
+\parbox{\MYcolC}{
+$((lim)-(id)-1)/$\\
+\MYin$(stride)+1$
+}
+\\ \hline
+\parbox[c][30pt]{\MYcolA}{
+\bfseries
+\grammarterm{id} \tcode{>} \grammarterm{lim}\\
+\grammarterm{lim} \tcode{<} \grammarterm{id}
+}&
+ERROR&
+$((id)-(lim))$&
+\parbox{\MYcolC}{
+$((id)-(lim)-1)/$\\
+\MYin$-(stride)+1$
+}&
+\parbox{\MYcolC}{
+$((id)-(lim)-1)/$\\
+\MYin$-(stride)+1$
+}
+\\ \hline
+\parbox[c][30pt]{\MYcolA}{
+\bfseries
+\grammarterm{id} \tcode{<=} \grammarterm{lim}\\
+\grammarterm{lim} \tcode{>=} \grammarterm{id}
+}&
+\parbox{1in}{
+$((lim)-(id))$\\
+\MYin+1
+}&
+ERROR&
+\parbox{\MYcolC}{
+$((lim)-(id))/$\\
+\MYin$(stride)+1$
+}&
+\parbox{\MYcolC}{
+$((lim)-(id))/$\\
+\MYin$(stride)+1$
+}
+\\ \hline
+\parbox[c][30pt]{\MYcolA}{
+\bfseries
+\grammarterm{id} \tcode{>=} \grammarterm{lim}\\
+\grammarterm{lim} \tcode{<=} \grammarterm{id}
+}&
+ERROR&
+\parbox{\MYcolB}{
+$((id)-(lim))$\\
+\MYin$+1$
+}&
+\parbox{\MYcolC}{
+$((id)-(lim))/$\\
+\MYin$-(stride)+1$
+}&
+\parbox{\MYcolC}{
+$((id)-(lim))/$\\
+\MYin$-(stride)+1$
+}
+\\ \hline
+\parbox{\MYcolA}{
+\bfseries
+\grammarterm{id} \tcode{!=} \grammarterm{lim}\\
+\grammarterm{lim} \tcode{!=} \grammarterm{id}
+}&
+$((lim)-(id)$&
+$((id)-(lim))$&
+\parbox[c][72pt]{\MYcolC}{
+$((stride)<0)$ \tcode{?}\\
+\MYin$((id)-(lim)-1)/$\\
+\MYin\MYin$-(stride)+1$ \tcode{:}\\
+\MYin$((lim)-(id)-1)/$\\
+\MYin\MYin$(stride)+1$
+}&
+\parbox{\MYcolC}{
+$((stride)<0)$ \tcode{?}\\
+\MYin$((lim)-(id)-1)/$\\
+\MYin\MYin$-(stride)+1$ \tcode{:}\\
+\MYin$((id)-(lim)-1)/$\\
+\MYin\MYin$(stride)+1$
+}
+\\ \hline
+\end{tabular}
+{\bfseries
+Legend:
+}
+
+\begin{tabular}{|l|l|l|}
+\hline
+\bfseries Name&
+\bfseries In the form of an expression&
+\bfseries In the iteration count expression
+\\ \hline
+$id$&
+The name of the control variable.&
+\parbox[c][30pt]{2.5in}{
+An expression with the type and value\\
+of the control variable.
+}
+\\ \hline
+$lim$&
+The limit expression.&
+\parbox[c][30pt]{2.5in}{
+An expression with the type and value\\
+of the limit expression.
+}
+\\ \hline
+$stride$&
+The stride expression.&
+\parbox[c][40pt]{2.5in}{
+An expression with the type and value\\
+of the stride expression
+for the control variable.
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+The
+\defn{iteration count}
+is computed according to
+\tref{tab:itcount}.%
+\footnote{EN:
+We need to say something about error cases.
+}
+The iteration count is computed after the loop initialization is performed,
+and before the control variable is modified by the loop.
+\begin{cpp}
+The iteration count expression shall be well-formed.
+\end{cpp}
+
+The type of the difference between the limit expression and the control variable
+is the
+\defn{subtraction type}\nocpp{.}%
+\yescpp{,}
+\begin{cpp}
+which shall be integral.
+When the condition operation is !=,
+(limit)-(var) and (var)-(limit) shall have the same type.
+\end{cpp}
+Each stride expression shall be convertible to the subtraction type.
+\begin{cpp}
+The loop odr-uses whatever operator-functions are selected
+to compute these differences.
+\end{cpp}
+
+\begin{cpp}
+
+\begin{table}[ht]
+\caption{
+Method of advancing an induction variable
+}
+\label{tab:inc}
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\bfseries Single-increment operator&
+\bfseries Expression
+\\ \hline
+\tcode{++ += +}&
+$V$ \tcode{+=} $X$
+\\ \hline
+\tcode{-- -= -}&
+$V$ \tcode{-=} $X$
+\\ \hline
+\end{tabular}
+\end{table}
+
+For each induction variable
+$V$,
+one of the expressions from
+\tref{tab:inc}
+shall be well-formed,
+depending on the operator used in its single-increment.
+In the table,
+$X$
+stands for some expression with the same type as the subtraction type.
+The loop odr-uses whatever
+\tcode{operator+=}
+and
+\tcode{operator-=}
+functions are selected by these expressions.
+\end{cpp}
+
+\ssclause{Dynamic constraints}
+
+If an induction variable is modified within the loop
+other than as the side effect of its single-increment operation,
+the behavior of the program is undefined.%
+
+\begin{cpp}
+If evaluation of the iteration count,
+or a call to a required
+\tcode{operator+=}
+or
+\tcode{operator-=}
+function,
+terminates with an exception,
+the behavior of the program is undefined.
+\end{cpp}
+
+If $X$ and $Y$ are values of the control variable
+that occur in consecutive evaluations of the loop condition
+in the serialization,%
+\footnote{EN:
+We do not have a definition of ``serialization''
+that is independent of syntax.
+}
+then the behavior is undefined if
+$((limit) - X) - ((limit) - Y)$,
+evaluated in infinite integer precision,
+does not equal the stride.
+
+\begin{note}
+In other words, the control variable must obey the rules of normal arithmetic.
+Unsigned wraparound is not allowed.
+\end{note}
+
+If the condition expression is true on entry to the loop,
+then the behavior is undefined
+if the computed iteration count is not greater than zero.
+If the computed iteration count is not representable
+as a value of type
+\tcode{unsigned long long},
+the behavior is undefined.
+
+\ssclause{Evaluation relaxations}
+
+The stride expressions shall not be evaluated if the iteration count is zero;
+otherwise,
+the stride and limit expressions are evaluated exactly once.%
+\footnote{DFEP:
+Neither OpenMP nor Cilk specifies
+how many times these expressions must be evaluated.
+}
+%If execution of a loop iteration alters the value
+%of the increment or limit expression,
+%the behavior is undefined.
+
+Within each iteration of the loop body,
+the name of each induction variable refers to a local object,
+as if the name were declared as an object within the body of the loop,
+with automatic storage duration and with the type of the original object.
+\begin{cpp}
+If the loop body throws an exception
+that is not caught within the same iteration of the loop,
+the behavior is undefined, unless otherwise specified.
+\end{cpp}
+
+\begin{cpp}
+\sclause{Constraints on a counted range-based \tcode{for} statement}
+In a counted range-based
+\tcode{for}
+statement ([stmt.ranged] 6.5.4),
+the type of the
+\tcode{__begin}
+variable,
+as determined from the
+\nonterminal{begin-expr},
+shall satisfy the requirements of a random access iterator.
+\begin{note}
+Intel has not yet implemented support for
+a parallel range-based
+\tcode{for}
+statement.
+\end{note}
+\end{cpp}

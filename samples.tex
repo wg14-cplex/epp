@@ -1,0 +1,195 @@
+\infannex{LaTeX samples}
+\sclause{Block-level normative elements}
+\ssclause{\ttfamily\textbackslash begin\{enumerate\}}
+\begin{enumerate}
+\item
+This is an enumerated list.
+\begin{enumerate}
+\item
+This is a nested enumerated list.
+\end{enumerate}
+\end{enumerate}
+
+\ssclause{\ttfamily\textbackslash begin\{description\}}
+\begin{description}
+\item[term]
+This is a description list.
+\item[longer term]
+More description list.
+\end{description}
+
+\ssclause{\ttfamily\textbackslash begin\{bnf\}}
+Grammar rules appear in the index automatically.
+The ``opt'' suffix should be applied only to the name of a non-terminal.
+
+\begin{bnf}
+\nontermdef{sample-rule-name}
+\br
+definition
+\br
+alternative\opt
+\br
+\terminal{(}
+sample-rule-name
+\terminal{)}
+\end{bnf}
+
+\ssclause{Tables}
+{\bfseries
+This is an advanced topic,
+not for the unwary.
+}
+
+\begin{table}[hb]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+A&B long%
+\\ \hline
+C longer&D%
+\\ \hline
+\end{tabular}
+\caption{
+Table caption
+}
+\end{table}
+
+\sclause{Text-level normative elements}
+\ssclause{\ttfamily\textbackslash tcode}
+The
+\tcode{for}
+keyword.
+
+\ssclause{\ttfamily\textbackslash defn}
+This paragraph defines this
+\defn{sample term};
+it is automatically added to the index.
+
+\ssclause{\texttt{\$} (math)}
+A reference to the meta-variable $X$.
+
+\ssclause{\ttfamily\textbackslash index}
+There is a sample index entry
+\index{sample index entry}
+pointing to this paragraph.
+
+\sclause{Non-normative text}
+\ssclause{\ttfamily\textbackslash footnote}
+Footnotes should be used very sparingly.
+(They're a technical challenge for TeX,
+so there are restrictions on their content.)%
+\footnote{
+This is a sample footnote.
+}
+
+\begin{comment}
+Supposedly this is a comment.
+\end{comment}
+
+\ssclause{\ttfamily\textbackslash begin\{note\}}
+
+A numbered note should generally be used for non-normative text.
+
+\begin{note}
+This is a numbered note.
+\end{note}
+
+\ssclause{\ttfamily\textbackslash begin\{example\}}
+\begin{example}
+This is a numbered example.
+\end{example}
+
+\ssclause{\ttfamily\textbackslash begin\{verbatim\}}
+\begin{verbatim}
+int main()
+{
+    printf("Hello, world\n");
+}
+\end{verbatim}
+
+\ssclause{\ttfamily\textbackslash begin\{anote\}}
+
+When there is only one note (or example) in a subclause,
+it can be changed to an unnumbered note (or example).
+
+\begin{anote}
+This is an unnumbered note.
+\end{anote}
+
+\ssclause{\ttfamily\textbackslash begin\{anexample\}}
+\begin{anexample}
+This is an unnumbered example.
+\end{anexample}
+
+\sclause{Revisions}
+\ssclause{\ttfamily\textbackslash added}
+There is
+\added{%
+some text}
+in this paragraph that has been added.
+
+\ssclause{\ttfamily\textbackslash removed}
+There is
+\removed{%
+some text}
+in this paragraph that has been removed.
+
+\ssclause{\ttfamily\textbackslash ednote}
+\ednote{This a note from the editor.}
+
+\sclause{Constructs not recommended}
+\ssclause{\ttfamily\textbackslash begin\{itemize\}}
+Lists with unnumbered bullets, especially with more than three items,
+should be used sparingly.
+
+\begin{itemize}
+\item
+This is an itemized list.
+\begin{itemize}
+\item
+This is a nested itemized list.
+\end{itemize}
+\end{itemize}
+
+\ssclause{\ttfamily\textbackslash begin\{quote\}}
+Quote blocks should not be used solely for indentation.
+\begin{quote}
+This is a quote block.
+\end{quote}
+
+\ssclause{\ttfamily\textbackslash begin\{quotation\}}
+Quotation blocks should not be used solely for indentation.
+\begin{quotation}
+This is a quotation block.
+\end{quotation}
+
+\ssclause{\ttfamily\textbackslash texttt, \textbackslash ttfamily}
+Fixed-width text should be marked with
+\verb`\`\verb`begin{verbatim}`
+or
+\verb`\tcode`
+instead.
+
+{\ttfamily
+This text is set in typewriter font.
+}
+
+\ssclause{\texttt{\textbackslash emph, \textbackslash em,
+\textbackslash textit, \textbackslash itshape} (italics)}
+Italics for the definition of a term are provided by
+\verb`\defn`.
+(Italics should never be used when referring to a defined term.)
+
+Italics are the default presentation in a grammar rule,
+and should not be made explicit.
+
+A reference to a meta-variable in a normative rule
+should be marked as math
+(i.e. surrounded by dollar signs).
+
+It should not be necessary to use italics for emphasis.
+
+For a reference to a grammar non-terminal,
+italics are used in the C++ standard,
+but not the C standard.
+When necessary, \verb`\grammarterm` should be used.
