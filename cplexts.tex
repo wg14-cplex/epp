@@ -17,6 +17,7 @@
 	linkcolor=blue,	% usual default for browsers
 	urlcolor=blue
 	]{hyperref}	% for PDF hyperlinks and bookmarks
+\usepackage{chngcntr}	% for paragraph numbering
 \usepackage{color}	% for editorial marking
 \usepackage{ifthen} 	% for conditional code/text
 \usepackage{listings}	% for code listings
@@ -42,7 +43,7 @@
 % These parameters, and the documentclass options,
 % are about document identification and overall formatting.
 \newcommand{\cplexts}{$CPLEXTS$}
-\renewcommand{\extrahead}{2014-02-05}
+\renewcommand{\extrahead}{2014-03-06}
 \standard{\cplexts}
 \yearofedition{2016}
 \languageofedition{(E)}
@@ -105,12 +106,14 @@ A pretty safe bet.
 
 \clause{Document conventions}
 
+\pnum
 \begin{cpp}
 Text that is specific to C++
 is enclosed in square brackets
 and presented in oblique sans-serif type.
 \end{cpp}
 
+\pnum
 Definitions of terms and grammar non-terminals defined in the C
 \begin{cpp}
 or C++
@@ -119,6 +122,7 @@ standard are not duplicated in this document.
 Terms and grammar non-terminals defined in this document
 are referenced in the index.
 
+\pnum
 According to the ISO editing directives,
 the use of footnotes
 ``shall be kept to a minimum.''
@@ -133,17 +137,10 @@ These mostly call attention to an area that needs more work.
 Departure from existing practice.
 \end{description}
 
+\pnum
 Annex A contains information
 concerning the editing of the LaTeX source of this document.
 It will not survive to final publication.
-
-Despite the examples of the C and C++ standards,
-the ISO editing directives state quite clearly
-that paragraphs should not be numbered.
-(``A paragraph is an unnumbered subdivision of a clause or subclause.'')
-Consequently, the LaTeX document class used for this document,
-which is specifically intended for ISO documents,
-does not support paragraph numbering.
 
 \include{countable}
 

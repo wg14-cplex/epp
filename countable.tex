@@ -1,5 +1,6 @@
 \clause{Counted loops}
 \sclause{Introduction}
+\pnum
 A
 \defn{counted loop}
 is a
@@ -15,6 +16,7 @@ The purpose of these constraints is to ensure that
 the loop's iteration count can be computed
 before the loop body is executed.
 
+\pnum
 There shall be no
 \tcode{return},
 \tcode{break},
@@ -25,6 +27,8 @@ statement that might transfer control into or out of a counted loop.
 
 \sclause{Constraints on a counted \tcode{for} statement}
 \ssclause{Introduction}
+
+\pnum
 The syntax of a
 \tcode{for}
 statement includes three
@@ -36,12 +40,14 @@ the second is called the condition clause or controlling expression;
 the third is called the
 \defn{loop-increment}.
 
+\pnum
 When a constraint limits the form of an expression,
 parentheses are allowed around the expression
 or any required subexpression.
 
 \ssclause{Constraints on the form of the control clauses}
 
+\pnum
 \begin{cpp}
 The
 \nonterminal{condition}
@@ -55,6 +61,7 @@ This is not believed to be useful in a counted loop.
 \end{note}
 \end{cpp}
 
+\pnum
 The controlling expression shall be a comparison expression
 with one of the following forms:%
 \footnote{DFEP:
@@ -75,6 +82,7 @@ relational-expression \terminal{>=} shift-expression
 equality-expression \terminal{!=} relational-expression
 \end{bnf}
 
+\pnum
 Exactly one of the operands of the comparison operator
 shall be an identifier designating an induction variable,
 as described below.
@@ -87,6 +95,7 @@ Any implicit conversion applied to that operand is not considered
 part of the limit expression.
 \end{cpp}
 
+\pnum
 The loop-increment shall be an expression with the following form:%
 \footnote{DFEP:
 OpenMP and ``classic'' Cilk allow only a single induction variable:
@@ -124,6 +133,7 @@ identifier \terminal{=} identifier \terminal{-} multiplicative-expression
 identifier \terminal{=} additive-expression \terminal{+} identifier
 \end{bnf}
 
+\pnum
 \begin{cpp}
 Each comma in the grammar of loop-increment shall represent
 a use of the built-in comma operator.
@@ -144,6 +154,7 @@ that is called the
 \defn{stride expression}
 for that induction variable.
 
+\pnum
 An induction variable shall not be designated by more than one
 \grammarterm{single-increment}.
 
@@ -169,6 +180,7 @@ This relaxation is implemented in Intel's compiler.
 
 \ssclause{Other statically checkable constraints}
 
+\pnum
 Each induction variable shall have unqualified integral%
 \yescpp{,}
 \begin{cpp}
@@ -178,6 +190,7 @@ copy-constructible class,
 or pointer type,
 and shall have automatic storage duration.
 
+\pnum
 Each stride expression shall have integral
 \begin{cpp}
 or enumeration
@@ -356,6 +369,7 @@ for the control variable.
 \end{tabular}
 \end{table}
 
+\pnum
 The
 \defn{iteration count}
 is computed according to
@@ -369,6 +383,7 @@ and before the control variable is modified by the loop.
 The iteration count expression shall be well-formed.
 \end{cpp}
 
+\pnum
 The type of the difference between the limit expression and the control variable
 is the
 \defn{subtraction type}\nocpp{.}%
@@ -406,6 +421,7 @@ $V$ \tcode{-=} $X$
 \end{tabular}
 \end{table}
 
+\pnum
 For each induction variable
 $V$,
 one of the expressions from
@@ -424,6 +440,7 @@ functions are selected by these expressions.
 
 \ssclause{Dynamic constraints}
 
+\pnum
 If an induction variable is modified within the loop
 other than as the side effect of its single-increment operation,
 the behavior of the program is undefined.%
@@ -439,6 +456,7 @@ terminates with an exception,
 the behavior of the program is undefined.
 \end{cpp}
 
+\pnum
 If $X$ and $Y$ are values of the control variable
 that occur in consecutive evaluations of the loop condition
 in the serialization,%
@@ -456,6 +474,7 @@ In other words, the control variable must obey the rules of normal arithmetic.
 Unsigned wraparound is not allowed.
 \end{note}
 
+\pnum
 If the condition expression is true on entry to the loop,
 then the behavior is undefined
 if the computed iteration count is not greater than zero.
@@ -466,6 +485,7 @@ the behavior is undefined.
 
 \ssclause{Evaluation relaxations}
 
+\pnum
 The stride expressions shall not be evaluated if the iteration count is zero;
 otherwise,
 the stride and limit expressions are evaluated exactly once.%
@@ -477,6 +497,7 @@ how many times these expressions must be evaluated.
 %of the increment or limit expression,
 %the behavior is undefined.
 
+\pnum
 Within each iteration of the loop body,
 the name of each induction variable refers to a local object,
 as if the name were declared as an object within the body of the loop,
@@ -489,6 +510,7 @@ the behavior is undefined, unless otherwise specified.
 
 \begin{cpp}
 \sclause{Constraints on a counted range-based \tcode{for} statement}
+\pnum
 In a counted range-based
 \tcode{for}
 statement ([stmt.ranged] 6.5.4),
