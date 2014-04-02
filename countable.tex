@@ -459,11 +459,7 @@ the behavior of the program is undefined.
 \pnum
 If $X$ and $Y$ are values of the control variable
 that occur in consecutive evaluations of the loop condition
-in the serialization,%
-\footnote{EN:
-We do not have a definition of ``serialization''
-that is independent of syntax.
-}
+in the serialization,
 then the behavior is undefined if
 $((limit) - X) - ((limit) - Y)$,
 evaluated in infinite integer precision,

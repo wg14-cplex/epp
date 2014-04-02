@@ -22,7 +22,7 @@
 \usepackage{ifthen} 	% for conditional code/text
 \usepackage{listings}	% for code listings
 \usepackage{makeidx}	% for indexing
-\usepackage{ulem}	% for underlining and strikeout
+\usepackage[normalem]{ulem}	% for underlining and strikeout
 \usepackage{underscore} % to simplify use of underscores
 \usepackage{verbatim}	% for code font
 \usepackage{xspace}	% to simplify a macro that expands to text
@@ -43,7 +43,7 @@
 % These parameters, and the documentclass options,
 % are about document identification and overall formatting.
 \newcommand{\cplexts}{$CPLEXTS$}
-\renewcommand{\extrahead}{2014-03-06}
+\renewcommand{\extrahead}{2014-03-31}
 \standard{\cplexts}
 \yearofedition{2016}
 \languageofedition{(E)}
@@ -82,17 +82,11 @@ that's not just boilerplate.
 \scopeclause
 \begin{inscope}{technical specification}
 \item
-Extensions to the C language to simplify parallel programming.%
-\footnote{EN:
-This is just my first guess.
-}
+Extensions to the C language to simplify writing a parallel program.
 \end{inscope}
 \begin{outofscope}{technical specification}
 \item
-World peace.%
-\footnote{EN:
-A pretty safe bet.
-}
+Support for writing a concurrent program.
 \end{outofscope}
 
 \normrefsclause
@@ -102,7 +96,7 @@ A pretty safe bet.
 \disref{ISO/IEC 14882:2014(E)}{Programming languages --- C++}
 \end{nreferences}
 
-\input{definitions}
+\include{definitions}
 
 \clause{Document conventions}
 
@@ -144,7 +138,11 @@ It will not survive to final publication.
 
 \include{countable}
 
-\include{samples}
+\include{parallelloop}
+
+\include{loopparameter}
+
+%\include{samples}
 
 \bibannex
 \begin{references}

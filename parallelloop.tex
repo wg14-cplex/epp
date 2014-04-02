@@ -1,0 +1,102 @@
+\clause{Parallel loops}
+
+\pnum
+A
+\defn{parallel loop}
+is a
+\tcode{for}
+statement with loop qualifiers.
+The grammar of the iteration statement (6.8.5, paragraph 1)
+is modified to read:
+
+\begin{bnf}
+\nontermdef{iteration-statement}
+\br
+\terminal{while} \terminal{(} expression \terminal{)} statement
+\br
+\terminal{do} statement \terminal{while} \terminal{(} expression \terminal{)} \terminal{;}
+\br
+\terminal{for} loop-qualifiers\opt \terminal{(}
+expression\opt \terminal{;}
+expression\opt \terminal{;}
+expression\opt \terminal{)} statement
+\br
+\terminal{for} loop-qualifiers\opt \terminal{(}
+declaration
+expression\opt \terminal{;}
+expression\opt \terminal{)} statement
+\end{bnf}
+
+\begin{cpp}
+The grammar of
+\nonterminal{iteration-statement}
+(6.5 [stmt.iter], paragraph 1)
+is modified to read:
+
+\begin{bnf}
+\nontermdef{iteration-statement}
+\br
+\terminal{while} \terminal{(} expression \terminal{)} statement
+\br
+\terminal{do} statement \terminal{while} \terminal{(} expression \terminal{)} \terminal{;}
+\br
+\terminal{for} loop-qualifiers\opt \terminal{(}
+for-init-statement
+condition\opt \terminal{;}
+expression\opt \terminal{)} statement
+\br
+\terminal{for} loop-qualifiers\opt \terminal{(}
+for-range-declaration \terminal{:}
+for-range-initializer \terminal{)} statement
+\end{bnf}
+
+\end{cpp}
+
+\pnum
+The following rules are added to the grammar:
+
+\begin{bnf}
+\nontermdef{loop-qualifiers}
+\br
+\terminal{_Task_parallel} loop-parameters\opt
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{loop-parameters}
+\br
+\terminal{[} expression \terminal{]}
+\end{bnf}
+
+\pnum
+A parallel loop is a counted loop,
+and shall satisfy all the constraints of a counted loop.
+
+\pnum
+In a parallel loop with the
+\tcode{_Task_parallel}
+loop qualifier,
+each iteration is a separate task,
+which is unsequenced with respect to
+all other iterations of that execution of the loop.
+
+\pnum
+If loop parameters are specified as part of the loop qualifiers,
+the contained expression shall have type
+\tcode{cplex_loop_params_t},%
+\footnote{EN:
+This should probably be
+``pointer to \tcode{cplex_loop_params_t}'',
+for consistency with the first argument of the set/get macros.
+}
+as defined in header
+\tcode{<cplex.h>}.%
+\footnote{DFEP:
+This syntax for specifying tuning parameters for a loop
+is a CPLEX invention.
+}
+
+\pnum
+The
+\defn{serialization}
+of a parallel loop
+is obtained by deleting the loop qualifiers from the loop.

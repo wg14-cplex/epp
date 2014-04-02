@@ -21,4 +21,5 @@
 \makeatletter
 \def\pnum{\addtocounter{Paras}{1}\noindent\llap{{%
   \scriptsize\raisebox{.7ex}{\arabic{Paras}}}\hspace{\@totalleftmargin}\quad}}
+\renewcommand{\definition}[2]{\@defcl{#1}\index{#1} #2}
 \makeatother

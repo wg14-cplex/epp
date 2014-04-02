@@ -1,0 +1,166 @@
+\clause{Parallel loop hint parameters \tcode{\textless{}cplex.h\textgreater{}}}
+
+\sclause{Introduction}
+
+\pnum
+The header
+\tcode{\textless cplex.h\textgreater}
+defines two types and several macros.
+The types are
+\begin{verbatim}
+cplex_loop_params_t
+\end{verbatim}
+which is a structure type
+with an unspecified number of members
+for specifying parameters for tuning hints for a parallel loop,
+and
+\begin{verbatim}
+cplex_sched_kind_t
+\end{verbatim}
+which is an enumerated type
+with at least the following enumeration constants,
+each with nonzero value:
+\begin{verbatim}
+cplex_sched_static
+cplex_sched_dynamic
+cplex_sched_guided
+\end{verbatim}
+
+\begin{note}
+Using one of these constants as the value of the
+\tcode{kind}
+parameter to
+\tcode{cplex_set_schedule_kind}
+may (but need not)
+select the corresponding OpenMP loop-scheduling algorithm.
+\end{note}
+
+\pnum
+When an object of type
+\tcode{cplex_loop_params_t}
+is used as the loop parameter of a parallel loop,
+the loop is described as being associated with the object.%
+\footnote{EN:
+What if the object is modified during the execution of the loop?
+}
+When executing a parallel loop associated with an object of type
+\tcode{cplex_loop_params_t},
+for any parameter for which the corresponding member has the value zero,
+an unspecified default value is used.
+
+\begin{example}
+Hint parameters for a parallel loop can be specified as follows:
+\begin{verbatim}
+#include <cplex.h>
+#include <stdlib.h>
+int main(int argc, char *argv[])
+{
+    cplex_loop_params_t hints = { 0 };
+    if (argc > 1) {
+        cplex_set_num_threads(&hints, atoi(argv[1]));
+    }
+    cplex_set_chunk_size(&hints, 1000);
+    for _Task_parallel[hints] (long i = 0; i < 1000000; i++) {
+        do_something_with(i);
+    }
+}
+\end{verbatim}
+\end{example}
+
+\begin{note}
+Because the following methods are specified as macros,
+not functions,
+taking the address of any of them need not be supported.
+However, an implementation is also free
+to provide functions with these names.
+\end{note}
+
+\sclause{The \tcode{cplex_set_num_threads} macro}
+\ssclause*{Synopsis}
+\begin{verbatim}
+#include <cplex.h>
+void cplex_set_num_threads(cplex_loop_params_t *hints, int num_threads);
+\end{verbatim}
+
+\ssclause*{Description}
+\pnum
+Sets to
+\tcode{num_threads}
+the recommended number of execution agents to be used
+to execute the iterations of a parallel loop
+associated with the object pointed to by
+\tcode{hints}.
+
+\sclause{The \tcode{cplex_get_num_threads} macro}
+\ssclause*{Synopsis}
+\begin{verbatim}
+#include <cplex.h>
+int cplex_get_num_threads(cplex_loop_params_t *hints);
+\end{verbatim}
+
+\ssclause*{Description}
+\pnum
+Retrieves the value set by
+\tcode{cplex_set_num_threads}
+from the object pointed to by
+\tcode{hints}.
+
+\sclause{The \tcode{cplex_set_chunk_size} macro}
+\ssclause*{Synopsis}
+\begin{verbatim}
+#include <cplex.h>
+void cplex_set_chunk_size(cplex_loop_params_t *hints, int chunk_size);
+\end{verbatim}
+
+\ssclause*{Description}
+\pnum
+Sets to
+\tcode{chunk_size}
+the recommended maximum number of iterations
+of a parallel loop associated with the object pointed to by
+\tcode{hints}
+to be grouped together to be executed sequentially
+in a single thread of execution.
+
+\sclause{The \tcode{cplex_get_chunk_size} macro}
+\ssclause*{Synopsis}
+\begin{verbatim}
+#include <cplex.h>
+int cplex_get_chunk_size(cplex_loop_params_t *hints);
+\end{verbatim}
+
+\ssclause*{Description}
+\pnum
+Retrieves the value set by
+\tcode{cplex_set_chunk_size}
+from the object pointed to by
+\tcode{hints}.
+
+\sclause{The \tcode{cplex_set_schedule_kind} macro}
+\ssclause*{Synopsis}
+\begin{verbatim}
+#include <cplex.h>
+void cplex_set_schedule_kind(cplex_loop_params_t *hints, cplex_sched_kind_t kind);
+\end{verbatim}
+
+\ssclause*{Description}
+\pnum
+Sets to
+\tcode{kind}
+the recommended scheduling algorithm
+for a parallel loop associated with the object pointed to by
+\tcode{hints}.
+
+\sclause{The \tcode{cplex_get_schedule_kind} macro}
+\ssclause*{Synopsis}
+\begin{verbatim}
+#include <cplex.h>
+cplex_sched_kind_t cplex_get_schedule_kind(cplex_loop_params_t *hints);
+\end{verbatim}
+
+\ssclause*{Description}
+\pnum
+Retrieves the value set by
+\tcode{cplex_set_schedule_kind}
+from the object pointed to by
+\tcode{hints}.

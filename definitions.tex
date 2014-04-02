@@ -1,6 +1,70 @@
 \defclause
 \begin{definitions}
-\definition{sample term}{
-a technical term with a definition
+
+For the purposes of this document,
+the following terms and definitions apply.
+
+\definition{thread of execution}{
+flow of control within a program,
+including a top-level statement or expression,
+and recursively including every function invocation it executes%
+\footnote{EN:
+Adapted from the C++ standard.
 }
+}
+
+\definition{OS thread}{
+service provided by an operating system
+for executing multiple threads of execution concurrently
+}
+
+\begin{note}
+There is typically significant overhead involved
+in creating a new OS thread.
+\end{note}
+
+\definition{thread}{
+thread of execution, or OS thread
+}
+
+\begin{note}
+This word, when used without qualification, is ambiguous.
+\end{note}
+
+\definition{execution agent}{
+entity, such as an OS thread,
+that may perform work in parallel with other execution agents%
+\footnote{EN:
+Adapted from the C++ standard.
+}
+}
+
+\definition{task}{
+thread of execution within a program
+that can be correctly executed asynchronously
+with respect to (certain) other parts of the program
+}
+
+\definition{concurrent program}{
+program that uses multiple concurrent interacting threads of execution,
+each with its own progress requirements
+}
+
+\begin{example}
+A program that has separate server and client threads
+is a concurrent program.
+\end{example}
+
+\definition{parallel program}{
+program whose computation is divided into tasks,
+which may be distributed across multiple computational units
+to be executed simultaneously
+}
+
+\begin{note}
+If sufficient computational resources are available,
+a parallel program may execute significantly faster than
+an otherwise equivalent serial program.
+\end{note}
+
 \end{definitions}
