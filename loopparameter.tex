@@ -5,48 +5,65 @@
 \pnum
 The header
 \tcode{\textless cplex.h\textgreater}
-defines two types and several macros.
-The types are
-\begin{verbatim}
-cplex_loop_params_t
-\end{verbatim}
-which is a structure type
+defines several types and several macros.
+
+\pnum
+The
+\pfxdefn{loop_params_t}
+type is a structure type
 with an unspecified number of members
-for specifying parameters for tuning hints for a parallel loop,
-and
-\begin{verbatim}
-cplex_sched_kind_t
-\end{verbatim}
-which is an enumerated type
+for specifying parameters for tuning hints for a parallel loop.
+
+\pnum
+The
+\pfxdefn{sched_kind_t}
+type is an enumerated type
 with at least the following enumeration constants,
 each with nonzero value:
-\begin{verbatim}
-cplex_sched_static
-cplex_sched_dynamic
-cplex_sched_guided
-\end{verbatim}
 
-\begin{note}
-Using one of these constants as the value of the
-\tcode{kind}
-parameter to
-\tcode{cplex_set_schedule_kind}
-may (but need not)
-select the corresponding OpenMP loop-scheduling algorithm.
-\end{note}
+\begin{ttfamily}
+\pfxdefn{sched_static}\\
+\pfxdefn{sched_dynamic}\\
+\pfxdefn{sched_guided}
+\end{ttfamily}
+
+\pnum
+The
+\pfxdefn{workload_t}
+type is an enumerated type
+with at least the following enumeration constants,
+each with nonzero value:
+
+\begin{ttfamily}
+\pfxdefn{workload_balanced}\\
+\pfxdefn{workload_unbalanced}
+\end{ttfamily}
 
 \pnum
 When an object of type
-\tcode{cplex_loop_params_t}
+\pfx{loop_params_t}
 is used as the loop parameter of a parallel loop,
 the loop is described as being associated with the object.%
 \footnote{EN:
 What if the object is modified during the execution of the loop?
 }
 When executing a parallel loop associated with an object of type
-\tcode{cplex_loop_params_t},
+\pfx{loop_params_t},
 for any parameter for which the corresponding member has the value zero,
 an unspecified default value is used.
+
+\pnum
+Each parameter is represented by a pair of macros:
+one to set the value of the parameter in the parameter block,
+and one to get the value of the parameter from the parameter block.
+
+\begin{note}
+Because these methods are specified as macros,
+not functions,
+taking the address of any of them need not be supported.
+However, an implementation is also free
+to provide functions with these names.
+\end{note}
 
 \begin{example}
 Hint parameters for a parallel loop can be specified as follows:
@@ -67,54 +84,38 @@ int main(int argc, char *argv[])
 \end{verbatim}
 \end{example}
 
-\begin{note}
-Because the following methods are specified as macros,
-not functions,
-taking the address of any of them need not be supported.
-However, an implementation is also free
-to provide functions with these names.
-\end{note}
-
-\sclause{The \tcode{cplex_set_num_threads} macro}
+\sclause{The \tcode{num_threads} parameter}
 \ssclause*{Synopsis}
-\begin{verbatim}
-#include <cplex.h>
-void cplex_set_num_threads(cplex_loop_params_t *hints, int num_threads);
-\end{verbatim}
+\begin{ttfamily}
+\#include <cplex.h>\\
+void \pfxdefn{set_num_threads}(\pfx{loop_params_t} *hints, int num_threads);\\
+int \pfx{get_num_threads}(\pfx{loop_params_t} *hints);
+\end{ttfamily}
 
 \ssclause*{Description}
 \pnum
-Sets to
+The
+\pfx{set_num_threads}
+macro sets to
 \tcode{num_threads}
 the recommended number of execution agents to be used
 to execute the iterations of a parallel loop
 associated with the object pointed to by
 \tcode{hints}.
 
-\sclause{The \tcode{cplex_get_num_threads} macro}
+\sclause{The \tcode{chunk_size} parameter}
 \ssclause*{Synopsis}
-\begin{verbatim}
-#include <cplex.h>
-int cplex_get_num_threads(cplex_loop_params_t *hints);
-\end{verbatim}
+\begin{ttfamily}
+\#include <cplex.h>\\
+void \pfxdefn{set_chunk_size}(\pfx{loop_params_t} *hints, int chunk_size);\\
+int \pfx{get_chunk_size}(\pfx{loop_params_t} *hints);
+\end{ttfamily}
 
 \ssclause*{Description}
 \pnum
-Retrieves the value set by
-\tcode{cplex_set_num_threads}
-from the object pointed to by
-\tcode{hints}.
-
-\sclause{The \tcode{cplex_set_chunk_size} macro}
-\ssclause*{Synopsis}
-\begin{verbatim}
-#include <cplex.h>
-void cplex_set_chunk_size(cplex_loop_params_t *hints, int chunk_size);
-\end{verbatim}
-
-\ssclause*{Description}
-\pnum
-Sets to
+The
+\pfx{set_chunk_size}
+macro sets to
 \tcode{chunk_size}
 the recommended maximum number of iterations
 of a parallel loop associated with the object pointed to by
@@ -122,45 +123,70 @@ of a parallel loop associated with the object pointed to by
 to be grouped together to be executed sequentially
 in a single thread of execution.
 
-\sclause{The \tcode{cplex_get_chunk_size} macro}
+\sclause{The \tcode{schedule_kind} parameter}
 \ssclause*{Synopsis}
-\begin{verbatim}
-#include <cplex.h>
-int cplex_get_chunk_size(cplex_loop_params_t *hints);
-\end{verbatim}
+\begin{ttfamily}
+\#include <cplex.h>\\
+void \pfxdefn{set_schedule_kind}(\pfx{loop_params_t} *hints, \pfx{sched_kind_t} kind);\\
+\pfx{sched_kind_t} \pfx{get_schedule_kind}(\pfx{loop_params_t} *hints);
+\end{ttfamily}
 
 \ssclause*{Description}
 \pnum
-Retrieves the value set by
-\tcode{cplex_set_chunk_size}
-from the object pointed to by
-\tcode{hints}.
-
-\sclause{The \tcode{cplex_set_schedule_kind} macro}
-\ssclause*{Synopsis}
-\begin{verbatim}
-#include <cplex.h>
-void cplex_set_schedule_kind(cplex_loop_params_t *hints, cplex_sched_kind_t kind);
-\end{verbatim}
-
-\ssclause*{Description}
-\pnum
-Sets to
+The
+\pfx{set_schedule_kind}
+macro sets to
 \tcode{kind}
 the recommended scheduling algorithm
 for a parallel loop associated with the object pointed to by
 \tcode{hints}.
 
-\sclause{The \tcode{cplex_get_schedule_kind} macro}
+\begin{note}
+Setting the
+\tcode{schedule_kind}
+parameter to a particular value
+may (but need not)
+select the corresponding OpenMP loop-scheduling algorithm.
+\end{note}
+
+\sclause{The \tcode{workload_balance} parameter}
 \ssclause*{Synopsis}
-\begin{verbatim}
-#include <cplex.h>
-cplex_sched_kind_t cplex_get_schedule_kind(cplex_loop_params_t *hints);
-\end{verbatim}
+\begin{ttfamily}
+\#include <cplex.h>\\
+void \pfxdefn{set_workload_balance}(\pfx{loop_params_t} *hints, \pfx{workload_t} kind);\\
+\pfx{workload_t} \pfx{get_workload_balance}(\pfx{loop_params_t} *hints);
+\end{ttfamily}
 
 \ssclause*{Description}
 \pnum
-Retrieves the value set by
-\tcode{cplex_set_schedule_kind}
-from the object pointed to by
+The
+\pfx{set_workload_balance}
+macro sets to
+\tcode{kind}
+the workload-balancing characteristic
+for a parallel loop associated with the object pointed to by
 \tcode{hints}.
+
+\pnum
+For a loop with a balanced workload,
+each iteration should be assumed to execute
+in approximately the same amount of time.
+A loop with an unbalanced workload
+should be assumed to have iterations taking a random amount of time.
+
+\begin{note}
+This parameter is semantically a statement about the associated loop,
+whereas the
+\tcode{schedule_kind}
+parameter is semantically a request to the implementation.
+Setting this parameter to
+\pfx{workload_balanced}
+may have an effect similar to setting the schedule to
+\pfx{schedule_static}.
+Setting this parameter to
+\pfx{workload_unbalanced}
+may have an effect similar to setting the schedule to
+\pfx{schedule_dynamic}
+or
+\pfx{schedule_guided}.
+\end{note}

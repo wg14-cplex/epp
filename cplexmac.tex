@@ -1,3 +1,4 @@
+% cpp environment for C++-specific text
 \ifthenelse{\boolean{hidecpp}}
 {\let\cpp=\comment
 \let\endcpp=\endcomment
@@ -10,6 +11,10 @@
 \newcommand{\nocpp}[1]{}
 \newcommand{\yescpp}[1]{#1}
 }
+% Prefixed names
+\newcommand{\prefix}{cplex}
+\newcommand{\pfx}[1]{\tcode{\prefix{}\_#1}}
+\newcommand{\pfxdefn}[1]{\pfx{#1}\indextext{\idxcode{#1}}}
 %% Paragraph numbering
 \newcounter{Paras}
 \counterwithin{Paras}{clause}
