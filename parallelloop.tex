@@ -16,15 +16,15 @@ is modified to read:
 \br
 \terminal{do} statement \terminal{while} \terminal{(} expression \terminal{)} \terminal{;}
 \br
-\terminal{for} loop-qualifiers\opt \terminal{(}
-expression\opt \terminal{;}
-expression\opt \terminal{;}
-expression\opt \terminal{)} statement
+loop-qualifiers\opt{} \terminal{for} \terminal{(}
+expression\opt{} \terminal{;}
+expression\opt{} \terminal{;}
+expression\opt{} \terminal{)} statement
 \br
-\terminal{for} loop-qualifiers\opt \terminal{(}
+loop-qualifiers\opt{} \terminal{for} \terminal{(}
 declaration
-expression\opt \terminal{;}
-expression\opt \terminal{)} statement
+expression\opt{} \terminal{;}
+expression\opt{} \terminal{)} statement
 \end{bnf}
 
 \begin{cpp}
@@ -40,12 +40,12 @@ is modified to read:
 \br
 \terminal{do} statement \terminal{while} \terminal{(} expression \terminal{)} \terminal{;}
 \br
-\terminal{for} loop-qualifiers\opt \terminal{(}
+loop-qualifiers\opt{} \terminal{for} \terminal{(}
 for-init-statement
-condition\opt \terminal{;}
-expression\opt \terminal{)} statement
+condition\opt{} \terminal{;}
+expression\opt{} \terminal{)} statement
 \br
-\terminal{for} loop-qualifiers\opt \terminal{(}
+loop-qualifiers\opt{} \terminal{for} \terminal{(}
 for-range-declaration \terminal{:}
 for-range-initializer \terminal{)} statement
 \end{bnf}
@@ -82,10 +82,10 @@ all other iterations of that execution of the loop.
 \pnum
 If loop parameters are specified as part of the loop qualifiers,
 the contained expression shall have type
-\tcode{cplex_loop_params_t},%
+\pfx{loop_params_t},%
 \footnote{EN:
 This should probably be
-``pointer to \tcode{cplex_loop_params_t}'',
+``pointer to \pfx{loop_params_t}'',
 for consistency with the first argument of the set/get macros.
 }
 as defined in header
