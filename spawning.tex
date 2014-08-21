@@ -1,0 +1,180 @@
+\clause{Spawning tasks}
+\sclause{Task statements}
+
+\pnum
+The grammar of a statement (6.8, paragraph 1)
+\begin{cpp}
+(clause 6, paragraph 1)
+\end{cpp}
+is modified to add task-statement as a new alternative.
+
+\ssclause*{Syntax}
+
+\begin{bnf}
+\nontermdef{task-statement}
+\br
+task-block-statement
+\br
+task-spawn-statement
+\br
+task-sync-statement
+\br
+task-call-statement
+\end{bnf}
+
+\sclause{The task block statement}
+\ssclause*{Syntax}
+
+\begin{bnf}
+\nontermdef{task-block-statement}
+\br
+\terminal{_Task_parallel} \terminal{_Block} compound-statement
+\end{bnf}
+
+\ssclause*{Semantics}
+
+\pnum
+Defines a task block, within which tasks can be spawned.
+At the end of the contained compound statement,
+all child tasks spawned directly or indirectly
+within the compound statement are
+\defn{joined}:
+the statement following the task block is not executed
+until all of the child tasks complete.
+
+\pnum
+For a given statement, the
+\defn{associated task block}
+is defined as follows.
+For a statement within a task spawn statement,
+there is no associated task block,
+except within a nested task block statement.
+For a statement within a task block statement,
+the associated task block is the smallest enclosing task block statement.
+Otherwise, for a statement within the body of a function
+declared with the spawning function specifier,
+the associated task block is the same as it was
+at the point of the task spawning call statement
+that invoked the spawning function.
+For statements in other contexts,
+there is no associated task block.
+\footnote{EN:
+Should a parallel loop implicitly establish its own task block?
+}
+
+\begin{note}
+Task blocks can be nested lexically and/or dynamically.
+Determination of the associated task block is a hybrid process:
+lexically within a function,
+and dynamically across calls to spawning functions.%
+\footnote{DFEP:
+In Cilk, this determination can be done entirely lexically.
+In OpenMP, this determination can be done entirely dynamically.
+}
+Code designated for execution in another thread
+by means other than a task statement
+(e.g. using
+\tcode{thrd_create})
+is not part of any task block.
+\end{note}
+
+\sclause{The task spawn statement}
+\ssclause*{Syntax}
+
+\begin{bnf}
+\nontermdef{task-spawn-statement}
+\br
+\terminal{_Task_parallel} \terminal{_Spawn} compound-statement
+\end{bnf}
+
+\ssclause*{Constraints}
+
+\pnum
+A task spawn statement shall have an associated task block.
+
+\ssclause*{Semantics}
+\pnum
+Creates a child task of the associated task block
+of the task spawn statement,
+in which the contained compound statement is executed.
+The execution of the task is unsequenced
+with respect to the statements of the associated task block
+following the spawn statement.
+The completion of the task synchronizes
+with the completion of the associated task block,
+or with the next execution of a sync statement
+within the associated task block.
+
+\sclause{The task sync statement}
+\ssclause*{Syntax}
+
+\begin{bnf}
+\nontermdef{task-sync-statement}
+\br
+\terminal{_Task_parallel} \terminal{_Sync} \terminal{;}
+\end{bnf}
+
+\ssclause*{Constraints}
+
+\pnum
+A task sync statement shall have an associated task block.
+
+\ssclause*{Semantics}
+\pnum
+Joins all child tasks of the associated task block
+of the task sync statement.
+
+\sclause{The task spawning call statement}
+\ssclause*{Syntax}
+\begin{bnf}
+\nontermdef{task-call-statement}
+\br
+\terminal{_Task_parallel} \terminal{_Call} expression-statement
+\footnote{EN:
+Using the same keyword pair
+for the statement prefix and the function specifier
+introduces a case where three tokens of lookahead
+(and hopefully no more)
+are sometimes needed
+to disambiguate a declaration from a statement.
+Is this what we want?
+}
+\end{bnf}
+\ssclause*{Constraints}
+
+\pnum
+A task spawning call statement shall have an associated task block.
+
+\ssclause*{Semantics}
+
+\pnum
+The contained expression statement is executed normally.
+Any called spawning function is allowed to spawn tasks;
+any such tasks are associated with the associated task block
+of the task spawning call statement,
+and are unsequenced with respect to the statements of the task block
+following the task spawning call statement.
+
+\sclause{The spawning function specifier}
+\ssclause*{Syntax}
+\pnum
+A new alternative is added to the grammar of function specifier
+(6.7.4 paragraph 1):
+
+\begin{bnf}
+\nontermdef{function-specifier}
+\br
+\terminal{_Task_parallel} \terminal{_Call}
+\end{bnf}
+
+\ssclause*{Constraints}
+\pnum
+If a spawning function specifier appears
+on any declaration of a function,
+it shall appear on every declaration of that function.
+A function declared with a spawning function specifier
+shall be called only from a task spawning call statement.
+\footnote{EN:
+Is a spawning function specifier part of the function's type?
+If so, are function-pointer conversions allowed?
+}

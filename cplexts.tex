@@ -25,10 +25,11 @@
 \usepackage[normalem]{ulem}	% for underlining and strikeout
 \usepackage{underscore} % to simplify use of underscores
 \usepackage{verbatim}	% for code font
-\usepackage{xspace}	% to simplify a macro that expands to text
+\usepackage{xspace}	% to simplify macros that expand to text
 \makeindex
 \setcounter{secnumdepth}{6}
-\setcounter{tocdepth}{6} % increase to check outline structure
+\setcounter{tocdepth}{2} % practical TOC size
+\setcounter{tocdepth}{6} % uncomment to check outline structure
 
 % These macros are from the WG21 standard source.
 \input{macros}
@@ -43,7 +44,7 @@
 % These parameters, and the documentclass options,
 % are about document identification and overall formatting.
 \newcommand{\cplexts}{$CPLEXTS$}
-\renewcommand{\extrahead}{2014-06-24}
+\renewcommand{\extrahead}{2014-08-13}
 \standard{\cplexts}
 \yearofedition{2016}
 \languageofedition{(E)}
@@ -139,6 +140,8 @@ It will not survive to final publication.
 \include{countable}
 
 \include{parallelloop}
+
+\include{spawning}
 
 \include{loopparameter}
 
