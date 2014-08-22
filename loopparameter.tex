@@ -40,6 +40,18 @@ each with nonzero value:
 \end{ttfamily}
 
 \pnum
+The
+\pfxdefn{affinity_t}
+type is an enumerated type
+with at least the following enumeration constants,
+each with nonzero value:
+
+\begin{ttfamily}
+\pfxdefn{affinity_close}\\
+\pfxdefn{affinity_spread}
+\end{ttfamily}
+
+\pnum
 When an object of type
 \pfx{loop_params_t}
 is used as the loop parameter of a parallel loop,
@@ -191,3 +203,27 @@ may have an effect similar to setting the schedule to
 or
 \pfx{schedule_guided}.
 \end{note}
+
+\sclause{The \tcode{affinity} parameter}
+\ssclause*{Synopsis}
+\begin{ttfamily}
+\#include <cplex.h>\\
+void \pfxdefn{set_affinity}(\pfx{loop_params_t} *hints, \pfx{affinity_t} kind);\\
+\pfx{affinity_t} \pfx{get_affinity}(\pfx{loop_params_t} *hints);
+\end{ttfamily}
+
+\ssclause*{Description}
+\pnum
+The
+\pfx{set_affinity}
+macro sets to
+\tcode{kind}
+the recommended affinity
+for a parallel loop associated with the object pointed to by
+\tcode{hints}.
+
+\pnum
+The affinity of a loop indicates whether the loop benefits
+from being executed by co-located hardware threads,
+or whether performance is likely to improve if the software threads
+are spread over multiple cores.
