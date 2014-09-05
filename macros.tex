@@ -1,3 +1,4 @@
+%!TEX root = std.tex
 % Definitions and redefinitions of special commands
 
 %%--------------------------------------------------
@@ -11,7 +12,6 @@
 \begin{comment}
 \renewcommand{\changed}[2]{\removed{#1}\added{#2}}
 \end{comment}
-\newcommand{\changed}[2]{\removed{#1}\added{#2}}
 
 \newcommand{\nbc}[1]{[#1]\ }
 \newcommand{\addednb}[2]{\added{\nbc{#1}#2}}
@@ -107,6 +107,7 @@
 \newcommand{\defn}[1]{\defnx{#1}{#1}}
 \newcommand{\term}[1]{\textit{#1}\xspace}
 \newcommand{\grammarterm}[1]{\textit{#1}\xspace}
+\newcommand{\placeholder}[1]{\textit{#1}\xspace}
 
 %%--------------------------------------------------
 %% allow line break if needed for justification
@@ -128,7 +129,9 @@
 \newcommand{\exor}{\^{}}
 \newcommand{\bigoh}[1]{\ensuremath{\mathscr{O}(#1)}}
 % \renewcommand{\tilde}{{\smaller\ensuremath{\sim}}}    % extra level of braces is necessary
-% \renewcommand{\tilde}{\protect\raisebox{-.5ex}{\larger\textasciitilde}}
+\begin{comment}
+\renewcommand{\tilde}{\protect\raisebox{-.5ex}{\larger\textasciitilde}}
+\end{comment}
 
 %%--------------------------------------------------
 %% States and operators
@@ -197,8 +200,6 @@
 %% Code annotations
 \newcommand{\EXPO}[1]{\textit{#1}}
 \newcommand{\expos}{\EXPO{exposition only}}
-\newcommand{\exposr}{\expos}
-\newcommand{\exposrc}{\expos}
 \newcommand{\impdef}{\EXPO{implementation-defined}}
 \newcommand{\impdefx}[1]{\indeximpldef{#1}\EXPO{implementation-defined}}
 \newcommand{\notdef}{\EXPO{not defined}}
