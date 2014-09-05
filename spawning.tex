@@ -41,6 +41,12 @@ within the compound statement are
 \defn{joined}:
 the statement following the task block is not executed
 until all of the child tasks complete.
+\footnote{EN:
+Is a branch allowed into or out of a task block?
+}
+\footnote{EN:
+What about C++ EH?
+}
 
 \pnum
 For a given statement, the
@@ -48,19 +54,19 @@ For a given statement, the
 is defined as follows.
 For a statement within a task spawn statement,
 there is no associated task block,
-except within a nested task block statement.
-For a statement within a task block statement,
-the associated task block is the smallest enclosing task block statement.
+except within a nested task block statement
+or parallel loop.
+For a statement within a task block statement
+or parallel loop,
+the associated task block is the smallest enclosing task block statement
+or parallel loop.
 Otherwise, for a statement within the body of a function
 declared with the spawning function specifier,
 the associated task block is the same as it was
 at the point of the task spawning call statement
 that invoked the spawning function.
-For statements in other contexts,
+For a statement in any other context,
 there is no associated task block.
-\footnote{EN:
-Should a parallel loop implicitly establish its own task block?
-}
 
 \begin{note}
 Task blocks can be nested lexically and/or dynamically.
@@ -91,6 +97,9 @@ is not part of any task block.
 
 \pnum
 A task spawn statement shall have an associated task block.
+\footnote{EN:
+Is a branch allowed into or out of a spawned statement?
+}
 
 \ssclause*{Semantics}
 \pnum
