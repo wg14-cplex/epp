@@ -46,7 +46,7 @@
 % These parameters, and the documentclass options,
 % are about document identification and overall formatting.
 \newcommand{\cplexts}{$CPLEXTS$}
-\renewcommand{\extrahead}{2014-09-04}
+\renewcommand{\extrahead}{N1862}
 \standard{\cplexts}
 \yearofedition{2016}
 \languageofedition{(E)}
@@ -54,9 +54,20 @@
 \begin{document}
 
 \begin{cover}
-This is the cover page.
-When ISO publishes a document, they apply their own title page,
-so CPLEX/WG14 can put anything here.
+\begin{tabular}{l l}
+\textbf{Doc. no:} & N1862 \\
+\textbf{Date:} & 2014-09-18 \\
+\textbf{Reply to:} & Clark Nelson
+\end{tabular}
+
+{\Huge
+\bfseries
+Programming languages --- C --- \\
+Extensions for parallel programming
+}
+
+This is the latest working draft of the CPLEX study group,
+for the consideration of WG14.
 \clearpage
 \end{cover}
 
@@ -118,6 +129,8 @@ or C++
 standard are not duplicated in this document.
 Terms and grammar non-terminals defined in this document
 are referenced in the index.
+The ``cplex_'' prefix of library identifiers
+is omitted from the index entry.
 
 \pnum
 According to the ISO editing directives,
@@ -134,10 +147,12 @@ These mostly call attention to an area that needs more work.
 Departure from existing practice.
 \end{description}
 
+\begin{comment}
 \pnum
 Annex A contains information
 concerning the editing of the LaTeX source of this document.
 It will not survive to final publication.
+\end{comment}
 
 \include{countable}
 
