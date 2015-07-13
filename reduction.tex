@@ -1,0 +1,722 @@
+\clause{Reduction types}
+\sclause{Introduction}
+
+\sclause{Reduction specifiers}
+\ssclause*{Syntax}
+
+\pnum
+\begin{bnf}
+\nontermdef{reduction-specifier}
+\br
+\terminal{_Reduction} identifier\opt{} \terminal{\{} reduction-aspect-list \terminal{\}}
+\br
+\terminal{_Reduction} identifier
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{reduction-aspect-list}
+\br
+reduction-aspect
+\br
+reduction-aspect-list \terminal{,} reduction-aspect
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{reduction-aspect}
+\br
+\terminal{_Type} \terminal{:} type-name
+\br
+\terminal{_Combiner} \terminal{:} combiner-operation
+\br
+\terminal{_Initializer} \terminal{:} initializer
+\br
+\terminal{_Finalizer} \terminal{:} constant-expression
+\br
+\terminal{_Order} \terminal{:} reduction-order-constraint
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{combiner-operation}
+\br
+constant-expression
+\br
+builtin-combiner-operation
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{builtin-combiner-operation}
+\textnormal{one of}
+\br
+\terminal{*=} \terminal{+=}
+\br
+\terminal{\&=} \terminal{\textasciicircum=} \terminal{|=}
+\br
+\terminal{_And} \terminal{_Or}
+\br
+\terminal{_Min} \terminal{_Max}
+\br
+\terminal{_Last}
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{reduction-order-constraint}
+\br
+\terminal{_Commutative}
+\br
+\terminal{_Associative}
+\br
+\terminal{_Serial}
+\end{bnf}
+
+\ssclause*{Constraints}
+
+\pnum
+The type and combiner aspects shall be present in every reduction specifier.
+Any given kind of aspect shall not be present more than once
+in a reduction specifier. 
+
+\pnum
+The proxied type of a reduction shall be
+an unqualified arithmetic or pointer to object
+or complete structure or union type.%
+\footnote{EN:
+Alternatively: it shall not be
+an incomplete or array or function
+or pointer-to-function or qualified type.
+}
+
+\pnum
+If the combiner is a constant expression,
+then it shall be an address constant
+referring to a function taking two arguments,
+both of pointer-to-proxied type.
+If it is a compound assignment operator,
+then it shall be one that is usable with an lvalue of the proxied type.%
+\footnote{
+For example, if the proxied type is a floating type,
+the operator shall not be
+\tcode{|=}.
+}
+If it is
+\tcode{_And}
+or
+\tcode{_Or},
+the proxied type shall be an integer type.
+If it is
+\tcode{_Min}
+or
+\tcode{_Max},
+the proxied type shall be an arithmetic type.
+
+\pnum
+The initializer of a reduction
+shall be suitable to initialize
+an object of the proxied type
+having static storage duration,
+or shall be an address constant referring to a function.
+If it is an address constant,
+it shall refer to a function
+taking one argument of pointer-to-proxied type.
+
+\pnum
+The finalizer of a reduction
+shall be an address constant referring to a function
+taking one argument of pointer-to-proxied type.
+
+\ssclause*{Semantics}
+
+\pnum
+A reduction is a type containing a proxied member
+of an associated proxied type.
+Each concurrently-executing task
+that refers to an object of reduction type
+has its own distinct proxied member object
+(called its
+\defn{view})
+of the object.
+
+\begin{note}
+Thus, when they are used as intended,
+reduction objects can be updated from different tasks
+without causing data races.
+\end{note}
+
+\pnum
+At any point within a parallel computation,
+the value of a view reflects a sub-computation on the reduction object.
+At some point after the completion of a set of tasks,
+partial results are combined, two at a time,
+using the combiner operation of the reduction type
+to merge one view into another.
+The resulting value reflects the union
+of the sub-computations on the two original views.
+ 
+\pnum
+A reduction object is
+\defn{serially consistent}
+when no other task that could access it in parallel is executing.
+A serially consistent reduction object has a single view,
+called the
+\defn{root view},
+reflecting the entire set of computations on the reduction object
+since its creation.
+ 
+\pnum
+If the combiner operation is a function pointer,
+the combination is performed by executing:
+
+\begin{bnf}
+\terminal{(*}combiner\terminal{)(\&}into_view\terminal{, \&}from_view\terminal{);}
+\end{bnf}
+
+If the combiner operation is a compound assignment operator
+($op$=),
+the combination is performed by executing:
+
+\begin{bnf}
+into_view op\terminal{=} from_view\terminal{;}
+\end{bnf}
+
+Otherwise the combination is performed according to
+\tref{tab:comb}.
+In all cases the object designated
+$into\_view$
+is expected to be modified to reflect the combined sub-computations.
+The object designated
+$from\_view$
+is unused after being combined with
+$into\_view$
+except as the argument to the finalizer.
+
+\begin{table}[ht]
+\caption{
+Combination method for built-in combiners
+}
+\label{tab:comb}
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\bfseries Specified combiner&
+\bfseries Combination method
+\\ \hline
+\tcode{_And}&
+$into\_view$ \tcode{=} $into\_view$ \tcode{\&\&} $from\_view$ \tcode{;}
+\\ \hline
+\tcode{_Or}&
+$into\_view$ \tcode{=} $into\_view$ \tcode{||} $from\_view$ \tcode{;}
+\\ \hline
+\tcode{_Min}&
+\tcode{if (} $from\_view$ \tcode{<} $into\_view$ \tcode{)}
+$into\_view$ \tcode{=} $from\_view$ \tcode{;}
+\\ \hline
+\tcode{_Max}&
+\tcode{if (} $from\_view$ \tcode{>} $into\_view$ \tcode{)}
+$into\_view$ \tcode{=} $from\_view$ \tcode{;}
+\\ \hline
+\tcode{_Last}&
+$into\_view$ \tcode{=} $from\_view$ \tcode{;}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\pnum
+At some unspecified point
+before a task refers to a reduction object for the first time,
+the view used by the task is allocated, and initialized
+using the initializer of the reduction's type.
+If the initializer is a function pointer,
+the initialization is performed by executing:
+
+\begin{bnf}
+\terminal{(*}initializer\terminal{)(\&}view\terminal{);}
+\end{bnf}
+
+Otherwise, the view is initialized
+as if it were an object with static storage duration,
+using the specified initializer.
+If the initializer is not specified,
+and the specified combiner is in
+\tref{tab:init},
+the view is initialized with the corresponding value from
+\tref{tab:init}.
+\footnote{EN:
+It's not clear that what we have is complete
+considering dynamically-allocated reduction objects.
+}
+
+\begin{table}[ht]
+\caption{
+Default initializers for built-in combiners
+}
+\label{tab:init}
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\bfseries Specified combiner&
+\bfseries Default initializer
+\\ \hline
+\tcode{*=}&
+the value 1, converted to the proxied type
+\\ \hline
+\tcode{\&=}&
+the bitwise complement of converting zero to the proxied type
+\\ \hline
+\tcode{_And}&
+the value 1, converted to the proxied type
+\\ \hline
+\tcode{_Min}&
+the maximum value representable by the proxied type
+\\ \hline
+\tcode{_Max}&
+the minimum value representable by the proxied type
+\\ \hline
+\end{tabular}
+\end{table}
+
+\pnum
+It is unspecified whether a view is created
+for a task that does not access a specific reduction object.
+A task's view of a reduction object can be shared with other tasks
+that do not execute concurrently;
+it is not necessary that each task have a distinct view.
+Any initializer function is invoked only once for each distinct view,
+regardless how many tasks share that view.
+The initializer aspect of a reduction type is not used
+to initialize the root view of a reduction object;
+for purposes of initialization,
+the root view behaves like a member of the reduction object. 
+
+\pnum
+If the type of a reduction object has a finalizer,
+after a view has been used as the
+$from\_view$
+argument to the combiner operation,
+the view is finalized by executing:
+
+\begin{bnf}
+\terminal{(*}finalizer\terminal{)(\&}view\terminal{);}
+\end{bnf}
+
+The finalizer is not applied to the root view.
+
+\begin{note}
+A single view is never passed to concurrent invocations
+of the initializer, combiner operation, or finalizer
+of a reduction object.
+\end{note}
+
+\pnum
+Views are presented to the combiner operation in pairings
+that depend on the order aspect of the reduction type.
+In the following,
+for any point
+$P$
+at which the reduction object is serially consistent,
+let
+$S$
+represent the sequence of modifications
+that would be applied to the reduction object
+in the serialization of the program:
+
+\begin{description}
+\item[\tcode{_Commutative}]
+
+View combinations can be paired arbitrarily.
+The value of the root view at
+$P$
+reflects all of the operations in
+$S$,
+but applied in an unspecified order.
+
+\begin{note}
+Operations that are sensitive to operand order
+(e.g., string append)
+or to operation grouping
+(e.g., addition in the presence of overflow)
+might yield nondeterministic results that differ from the serialization.
+\end{note}
+
+\item[\tcode{_Associative}]
+
+Views are presented to the combiner operation
+such that the values of
+$into\_view$
+and
+$from\_view$
+reflect consecutive subsequences of
+$S$,
+respectively called
+$SL$ and $SR$.
+The value computed by the combiner operation
+(stored in
+$into\_view$)
+reflects the concatenation of
+$SL$ and $SR$,
+which comprises a contiguous subsequence of
+$S$.
+The value of the root view at
+$P$
+reflects all of the operations in
+$S$,
+but applied in unspecified groupings.
+
+\begin{note}
+Operations that are sensitive to operation grouping
+(e.g., addition in the presence of overflow)
+might yield nondeterministic results that differ from the serialization. 
+\end{note}
+
+\item[\tcode{_Serial}]
+\footnote{EN:
+Neither Cilk nor OpenMP provides this sort of guarantee.
+Should CPLEX include it?
+}
+Views are presented to the combiner operation
+such that the value of
+$into\_view$
+is the partial result reflecting an initial subsequence of
+$S$,
+called
+$SL$,
+and the value of
+$from\_view$
+is the partial result reflecting the next
+(single) consecutive operation in
+$S$
+following
+$SL$.
+Thus, modifications are made to a single view
+(ultimately the root view)
+in the same order as for the serialization.
+
+\begin{note}
+It is likely that the implementation
+will need to suppress concurrent execution of tasks
+in order to ensure this (fully deterministic) modification order.
+If so, there need not be more than one view,
+and the combiner operation might not be invoked at all. 
+\end{note}
+
+\end{description}
+
+\pnum
+If the combiner aspect of a reduction type is
+\tcode{_Last},
+the default for the order aspect is
+\tcode{_Associative}.%
+\footnote{EN:
+There was some sentiment for a stronger statement: that
+\tcode{_Last}
+should be required to be satisfy the associative constraint
+even if a weaker order constraint is specified.
+But specifying it this way seemed easier and more natural.
+}
+Otherwise, the default for the order aspect is
+\tcode{_Commutative}.
+\footnote{DFEP:
+Neither OpenMP nor Cilk supports specifying the order constraint for reduction.
+OpenMP reductions provide only the guarantees of
+\tcode{_Commutative};
+Cilk reductions provide the guarantees of
+\tcode{_Associative}.
+}
+
+\pnum
+Two reduction types declared in separate translation units
+are compatible if all of the following conditions are satisfied:
+
+\begin{enumerate}
+\item
+Neither is declared with a tag, or they are declared with the same tag.
+\item
+Their proxied types are compatible.
+\item
+Their combiner operations are the same
+(either the same builtin combiner operation or the same function).
+\item
+Neither specifies a finalizer,
+or their finalizers are specified with equal values.
+\item
+Their order aspects are specified or defaulted to be the same.
+\item
+If either is specified with an initializer that is the address of a function,
+then the other is specified with an initializer
+that is the address of the same function;
+otherwise, corresponding scalar components of the proxied type
+are initialized with equal values,
+and in corresponding components with union type,
+members with compatible types are initialized.
+\end{enumerate}
+
+\sclause{Integration with the standard}
+
+Change paragraph 7 of subclause 6.2.1 "Scopes of identifiers":
+
+\begin{quote}
+Structure, union,
+\added{reduction,}
+and enumeration tags have scope that begins
+just after the appearance of the tag
+in a type specifier that declares the tag. ...
+\end{quote}
+
+Change the list item of paragraph 1
+of subclause 6.2.3 "Name spaces of identifiers":
+
+\begin{quote}
+\begin{itemize}
+\item
+the
+\textit{tags}
+of structures, unions,
+\added{reductions,}
+and enumerations
+(disambiguated by following any of the keywords
+\tcode{struct},
+\tcode{union},
+\tcode{\added{_Reduction}},
+or
+\tcode{enum});
+\end{itemize}
+\end{quote}
+
+Add a new item
+to the list in paragraph 20 of subclause 6.2.5 "Types":
+
+\begin{quote}
+\begin{itemize}
+\item
+A
+\defn{reduction type}
+describes a member object with a particular type,
+called the
+\defn{proxied type},
+and an associated combiner operation,
+along with other optional aspects,
+to support common parallel computations.
+\end{itemize}
+\end{quote}
+
+Add a new subclause to subclause 6.3.2 "Other operands":
+
+\begin{quote}
+\textbf{6.3.2.3a Reductions}
+
+An lvalue with reduction type is implicitly converted,
+through a run-time view lookup,
+to an lvalue with its corresponding proxied type.
+This conversion is suppressed
+if the address of the lvalue is taken in a context
+where the result is immediately converted,
+implicitly or explicitly,
+to a pointer to the original reduction type.
+
+\begin{example}
+Consider this code:
+
+\begin{verbatim}
+_Reduction int_add { _Type: int, _Combiner: += };
+_Reduction int_add x, y;
+x = y;	// int assignment: both operands converted by view lookup
+void f(_Reduction int_add *, int *);
+f(&x, &y);  // view lookup performed on y, but not on x
+int *pi = &x;
+f(pi, &x);  // error
+\end{verbatim}
+
+The last line of the example is an error because
+\tcode{pi},
+as an expression,
+is not taking the address of a reduction-converted lvalue.
+The expression that takes that address is in the previous line.
+The reduction lvalue conversion can be suppressed during translation,
+but not necessarily reversed during execution.
+As a further example:
+
+\begin{verbatim}
+f((_Reduction int_add *)pi, &x);
+\end{verbatim}
+
+This is not an error,
+but the first argument passed to the function
+need not point to the reduction object,
+so undefined behavior results if it used as if it did.
+\end{example}
+\end{quote}
+
+Change the grammar rule in subclause 6.4.1 "Keywords",
+by adding new alternatives:
+
+\begin{quote}
+\begin{bnf}
+\nontermdef{keyword}
+\textnormal{one of}\br
+...\br
+\terminal{\added{_Task_parallel}}\br
+\terminal{\added{_Block}}\br
+\terminal{\added{_Spawn}}\br
+\terminal{\added{_Sync}}\br
+\terminal{\added{_Call}}\br
+\terminal{\added{_Reduction}}
+\end{bnf}
+\end{quote}
+
+Add a new item to the list
+in paragraph 1 of subclause 6.5.16.1 "Simple assignment":
+
+\begin{quote}
+\begin{itemize}
+\item
+the left operand has atomic, qualified, or unqualified
+pointer to some reduction type,
+and the right operand expression
+is the taking of the address
+of some object having a qualified or unqualified version
+of the same reduction type
+(whose type is therefore a pointer to the reduction's proxied type),
+and the type pointed to by the left
+has all the qualifiers of the type pointed to by the right;
+\end{itemize}
+\end{quote}
+
+Change the grammar rule in subclause 6.7.2 "Type specifiers",
+by adding a new alternative:
+
+\begin{quote}
+\begin{bnf}
+\nontermdef{type-specifier}
+\br
+...
+\br
+\added{reduction-specifier}
+\end{bnf}
+\end{quote}
+
+Change paragraphs 2 through 6 of subclause 6.7.2.3 "Tags":
+
+\begin{quote}
+Where two declarations that use the same tag declare the same type,
+they shall both use the same choice of
+\tcode{struct},
+\tcode{union},
+\tcode{\added{_Reduction}},
+or
+\tcode{enum}.
+
+A type specifier of the form
+
+\begin{bnf}
+\terminal{\added{_Reduction}} \added{identifier}
+\end{bnf}
+
+\added{without a reduction aspect list, or}
+
+\begin{bnf}
+\terminal{enum} identifier
+\end{bnf}
+
+without an enumerator list
+shall only appear after the type it specifies is complete.
+
+All declarations of structure, union,
+\added{reduction,}
+or enumerated types that have the same scope and use the same tag
+declare the same type.
+
+Two declarations of structure, union,
+\added{reduction,}
+or enumerated types which are in different scopes or use different tags
+declare distinct types.
+Each declaration of a structure, union,
+\added{reduction,}
+or enumerated type which does not include a tag declares a distinct type.
+
+A type specifier of the form
+
+\begin{bnf}
+struct-or-union identifier\opt{} \terminal{\{} struct-declaration-list \terminal{\}}
+\end{bnf}
+
+\added{or}
+
+\begin{bnf}
+\terminal{\added{_Reduction}} \added{identifier\opt{} \terminal{\{} reduction-aspect-list \terminal{\}}}
+\end{bnf}
+
+or
+
+\begin{bnf}
+\terminal{enum} identifier\opt{} \terminal{\{} enumerator-list \terminal{\}}
+\end{bnf}
+
+or
+
+\begin{bnf}
+\terminal{enum} identifier\opt{} \terminal{\{} enumerator-list \terminal{, \}}
+\end{bnf}
+
+declares a structure, union,
+\added{reduction,}
+or enumerated type.
+The list defines the structure content, union content,
+\added{reduction content,}
+or enumeration content. ...
+\end{quote}
+
+Change paragraph 9 of 6.7.2.3 "Tags":
+
+\begin{quote}
+If a type specifier of the form
+
+\begin{bnf}
+struct-or-union identifier
+\end{bnf}
+
+\added{or}
+
+\begin{bnf}
+\terminal{\added{_Reduction}} \added{identifier}
+\end{bnf}
+
+or
+
+\begin{bnf}
+\terminal{enum} identifier
+\end{bnf}
+
+occurs other than as part of one of the above forms,
+and a declaration of the identifier as a tag is visible,
+then it specifies the same type as that other declaration,
+and does not redeclare the tag.
+\end{quote}
+
+Change paragraph 1 of subclause 6.7.6.3
+"Function declarations (including prototypes)":
+
+\begin{quote}
+A function declarator shall not specify a return type
+that is a function type or an array type
+\added{or a reduction type}.
+\end{quote}
+
+Add a new paragraph following paragraph 8 of subclause 6.7.6.3
+"Function declarations (including prototypes)":
+
+\begin{quote}
+A declaration of a parameter as a reduction type
+shall be adjusted to be a pointer to the same reduction type.
+\end{quote}
+
+Add a new paragraph following paragraph 8
+of subclause 6.7.9 "Initializers":
+
+\begin{quote}
+Any initializer for an object of reduction type initializes its root view.
+\footnote{EN:
+At the time it was incorporated into this document,
+the reduction proposal added:
+"If an object of reduction type is not initialized explicitly,
+then the root view is initialized as every other view is initialized."
+But this conflicted with the direction CPLEX approved (I think).
+}
+\end{quote}

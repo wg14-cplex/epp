@@ -46,17 +46,19 @@
 % These parameters, and the documentclass options,
 % are about document identification and overall formatting.
 \newcommand{\cplexts}{$CPLEXTS$}
-\renewcommand{\extrahead}{N1862}
+\renewcommand{\extrahead}{2015-07-13}
 \standard{\cplexts}
-\yearofedition{2016}
+\yearofedition{2017}
 \languageofedition{(E)}
+
+%\includeonly{reduction}
 
 \begin{document}
 
 \begin{cover}
 \begin{tabular}{l l}
-\textbf{Doc. no:} & N1862 \\
-\textbf{Date:} & 2014-09-18 \\
+% \textbf{Doc. no:} &  \\
+\textbf{Date:} & 2015-07-10 \\
 \textbf{Reply to:} & Clark Nelson
 \end{tabular}
 
@@ -66,8 +68,7 @@ Programming languages --- C --- \\
 Extensions for parallel programming
 }
 
-This is the latest working draft of the CPLEX study group,
-for the consideration of WG14.
+This is the latest working draft of the CPLEX study group.
 \clearpage
 \end{cover}
 
@@ -107,7 +108,7 @@ Support for writing a concurrent program.
 \normrefbp{technical specification}
 \begin{nreferences}
 \isref{ISO/IEC 9899:2011(E)}{Programming languages --- C}
-\disref{ISO/IEC 14882:2014(E)}{Programming languages --- C++}
+\isref{ISO/IEC 14882:2014(E)}{Programming languages --- C++}
 \end{nreferences}
 
 \include{definitions}
@@ -160,6 +161,8 @@ It will not survive to final publication.
 
 \include{spawning}
 
+\include{reduction}
+
 \include{loopparameter}
 
 %\%include{samples}
@@ -175,5 +178,7 @@ Language Extension Specification,}
 \isourl{http://www.openmp.org/mp-documents/OpenMP4.0.0.pdf}
 \end{references}
 
+% we definitely want a multi-column index, but we don't get one by default
+\twocolumn % even adding this doesn't get the job done
 \printindex
 \end{document}

@@ -147,7 +147,8 @@ in a single thread of execution.
 \ssclause*{Synopsis}
 \begin{ttfamily}
 \#include <cplex.h>\\
-void \pfxdefn{set_schedule_kind}(\pfx{loop_params_t} *hints, \pfx{sched_kind_t} kind);\\
+void \pfxdefn{set_schedule_kind}(\pfx{loop_params_t} *hints,\\
+\hspace*{2.5in}\pfx{sched_kind_t} kind);\\
 \pfx{sched_kind_t} \pfx{get_schedule_kind}(\pfx{loop_params_t} *hints);
 \end{ttfamily}
 
@@ -173,7 +174,8 @@ select the corresponding OpenMP loop-scheduling algorithm.
 \ssclause*{Synopsis}
 \begin{ttfamily}
 \#include <cplex.h>\\
-void \pfxdefn{set_workload_balance}(\pfx{loop_params_t} *hints, \pfx{workload_t} kind);\\
+void \pfxdefn{set_workload_balance}(\pfx{loop_params_t} *hints,\\
+\hspace*{2.5in}\pfx{workload_t} kind);\\
 \pfx{workload_t} \pfx{get_workload_balance}(\pfx{loop_params_t} *hints);
 \end{ttfamily}
 
