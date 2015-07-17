@@ -448,59 +448,7 @@ and in corresponding components with union type,
 members with compatible types are initialized.
 \end{enumerate}
 
-\sclause{Integration with the standard}
-
-Change paragraph 7 of subclause 6.2.1 "Scopes of identifiers":
-
-\begin{quote}
-Structure, union,
-\added{reduction,}
-and enumeration tags have scope that begins
-just after the appearance of the tag
-in a type specifier that declares the tag. ...
-\end{quote}
-
-Change the list item of paragraph 1
-of subclause 6.2.3 "Name spaces of identifiers":
-
-\begin{quote}
-\begin{itemize}
-\item
-the
-\textit{tags}
-of structures, unions,
-\added{reductions,}
-and enumerations
-(disambiguated by following any of the keywords
-\tcode{struct},
-\tcode{union},
-\tcode{\added{_Reduction}},
-or
-\tcode{enum});
-\end{itemize}
-\end{quote}
-
-Add a new item
-to the list in paragraph 20 of subclause 6.2.5 "Types":
-
-\begin{quote}
-\begin{itemize}
-\item
-A
-\defn{reduction type}
-describes a member object with a particular type,
-called the
-\defn{proxied type},
-and an associated combiner operation,
-along with other optional aspects,
-to support common parallel computations.
-\end{itemize}
-\end{quote}
-
-Add a new subclause to subclause 6.3.2 "Other operands":
-
-\begin{quote}
-\textbf{6.3.2.3a Reductions}
+\sclause{Reduction conversions}
 
 An lvalue with reduction type is implicitly converted,
 through a run-time view lookup,
@@ -542,9 +490,57 @@ but the first argument passed to the function
 need not point to the reduction object,
 so undefined behavior results if it used as if it did.
 \end{example}
+
+\sclause{Integration with the C standard}
+
+Change paragraph 7 of subclause 6.2.1 ``Scopes of identifiers":
+
+\begin{quote}
+Structure, union,
+\added{reduction,}
+and enumeration tags have scope that begins
+just after the appearance of the tag
+in a type specifier that declares the tag. ...
 \end{quote}
 
-Change the grammar rule in subclause 6.4.1 "Keywords",
+Change the list item of paragraph 1
+of subclause 6.2.3 ``Name spaces of identifiers":
+
+\begin{quote}
+\begin{itemize}
+\item
+the
+\textit{tags}
+of structures, unions,
+\added{reductions,}
+and enumerations
+(disambiguated by following any of the keywords
+\tcode{struct},
+\tcode{union},
+\tcode{\added{_Reduction}},
+or
+\tcode{enum});
+\end{itemize}
+\end{quote}
+
+Add a new item
+to the list in paragraph 20 of subclause 6.2.5 ``Types":
+
+\begin{quote}
+\begin{itemize}
+\item
+A
+\defn{reduction type}
+describes a member object with a particular type,
+called the
+\defn{proxied type},
+and an associated combiner operation,
+along with other optional aspects,
+to support common parallel computations.
+\end{itemize}
+\end{quote}
+
+Change the grammar rule in subclause 6.4.1 ``Keywords",
 by adding new alternatives:
 
 \begin{quote}
@@ -562,7 +558,7 @@ by adding new alternatives:
 \end{quote}
 
 Add a new item to the list
-in paragraph 1 of subclause 6.5.16.1 "Simple assignment":
+in paragraph 1 of subclause 6.5.16.1 ``Simple assignment":
 
 \begin{quote}
 \begin{itemize}
@@ -579,7 +575,7 @@ has all the qualifiers of the type pointed to by the right;
 \end{itemize}
 \end{quote}
 
-Change the grammar rule in subclause 6.7.2 "Type specifiers",
+Change the grammar rule in subclause 6.7.2 ``Type specifiers",
 by adding a new alternative:
 
 \begin{quote}
@@ -592,7 +588,7 @@ by adding a new alternative:
 \end{bnf}
 \end{quote}
 
-Change paragraphs 2 through 6 of subclause 6.7.2.3 "Tags":
+Change paragraphs 2 through 6 of subclause 6.7.2.3 ``Tags":
 
 \begin{quote}
 Where two declarations that use the same tag declare the same type,
@@ -663,7 +659,7 @@ The list defines the structure content, union content,
 or enumeration content. ...
 \end{quote}
 
-Change paragraph 9 of 6.7.2.3 "Tags":
+Change paragraph 9 of 6.7.2.3 ``Tags":
 
 \begin{quote}
 If a type specifier of the form
@@ -691,7 +687,7 @@ and does not redeclare the tag.
 \end{quote}
 
 Change paragraph 1 of subclause 6.7.6.3
-"Function declarations (including prototypes)":
+``Function declarations (including prototypes)":
 
 \begin{quote}
 A function declarator shall not specify a return type
@@ -700,7 +696,7 @@ that is a function type or an array type
 \end{quote}
 
 Add a new paragraph following paragraph 8 of subclause 6.7.6.3
-"Function declarations (including prototypes)":
+``Function declarations (including prototypes)":
 
 \begin{quote}
 A declaration of a parameter as a reduction type
@@ -708,7 +704,7 @@ shall be adjusted to be a pointer to the same reduction type.
 \end{quote}
 
 Add a new paragraph following paragraph 8
-of subclause 6.7.9 "Initializers":
+of subclause 6.7.9 ``Initializers":
 
 \begin{quote}
 Any initializer for an object of reduction type initializes its root view.
@@ -720,3 +716,28 @@ then the root view is initialized as every other view is initialized."
 But this conflicted with the direction CPLEX approved (I think).
 }
 \end{quote}
+
+\sclause{Integration with the C++ standard}
+
+Add new entries to table 3 in subclause 2.11 ``Keywords'':%
+\footnote{EN:
+This section is currently just an outline, and needs to be filled in.
+}
+
+Change paragraph 3 of subclause 3.3.2 ``Point of declaration":
+
+Changes to subclause 3.4.4 ``Elaborated type specifiers":
+
+Add a new item to the list in paragraph 1
+of subclause 3.9.2 ``Compound types":
+
+Add a new paragraph following paragraph 3
+of subclause 4.10 ``Pointer conversions":
+
+Change the grammar rule in paragraph 1 of subclause 7.1.6 ``Type specifiers":
+
+Change paragraphs 2 and 3 of subclause 7.1.6.3 ``Elaborated type specifiers":
+
+Change paragraph 5 of subclause 8.3.5 ``Functions":
+
+Change to subclause 8.5 ``Initializers":
