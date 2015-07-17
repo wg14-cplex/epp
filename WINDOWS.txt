@@ -1,0 +1,10 @@
+For Windows users, it is recommended that the following software be installed.
+
+	GitHub
+This is to access the document sources. The repository on github.com is wg14-cplex/epp. Only members of group wg14-cplex can commit to it.
+
+	MikTeX (2.9)
+This is the LaTeX engine. Be aware that the document uses quite a few additional packages that aren't installed by default. When you attempt to use a package that isn't installed, it will go out and try to install it from the network. Unfortunately, I haven't figured out how to get the installation process to work through a firewall. So when I discover a need to use a new package, I run and install it from home, without using VPN.
+
+	TeXstudio (2.6.6)
+This is a nice TeX IDE. It lets you generate the PDF with a single click, and view the result side-by-side with the source. Coolest of all, you can right-click on a word in the PDF and immediately jump to the corresponding spot in the source, and vice versa.
