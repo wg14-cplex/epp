@@ -1,6 +1,16 @@
 \clause{Reduction types}
 \sclause{Introduction}
 
+\pnum
+A
+\defn{reduction type}
+describes a member object with a particular type,
+called the
+\defn{proxied type},
+and an associated combiner operation,
+along with other optional aspects,
+to support common parallel computations.
+
 \sclause{Reduction specifiers}
 \ssclause*{Syntax}
 
@@ -77,8 +87,10 @@ in a reduction specifier.
 
 \pnum
 The proxied type of a reduction shall be
-an unqualified arithmetic or pointer to object
-or complete structure or union type.%
+one of the following:
+an unqualified arithmetic type,
+a pointer to object type,
+or a complete structure or union type.%
 \footnote{EN:
 Alternatively: it shall not be
 an incomplete or array or function
@@ -169,14 +181,6 @@ the combination is performed by executing:
 \terminal{(*}combiner\terminal{)(\&}into_view\terminal{, \&}from_view\terminal{);}
 \end{bnf}
 
-If the combiner operation is a compound assignment operator
-($op$=),
-the combination is performed by executing:
-
-\begin{bnf}
-into_view op\terminal{=} from_view\terminal{;}
-\end{bnf}
-
 Otherwise the combination is performed according to
 \tref{tab:comb}.
 In all cases the object designated
@@ -189,7 +193,7 @@ $into\_view$
 except as the argument to the finalizer.
 
 \begin{table}[ht]
-\caption{
+\caption{%
 Combination method for built-in combiners
 }
 \label{tab:comb}
@@ -198,6 +202,21 @@ Combination method for built-in combiners
 \hline
 \bfseries Specified combiner&
 \bfseries Combination method
+\\ \hline
+\tcode{*=}&
+$into\_view$ \tcode{*=} $from\_view$ \tcode{;}
+\\ \hline
+\tcode{+=}&
+$into\_view$ \tcode{+=} $from\_view$ \tcode{;}
+\\ \hline
+\tcode{\&=}&
+$into\_view$ \tcode{\&=} $from\_view$ \tcode{;}
+\\ \hline
+\tcode{\textasciicircum=}&
+$into\_view$ \tcode{\textasciicircum=} $from\_view$ \tcode{;}
+\\ \hline
+\tcode{|=}&
+$into\_view$ \tcode{|=} $from\_view$ \tcode{;}
 \\ \hline
 \tcode{_And}&
 $into\_view$ \tcode{=} $into\_view$ \tcode{\&\&} $from\_view$ \tcode{;}
@@ -245,7 +264,7 @@ considering dynamically-allocated reduction objects.
 }
 
 \begin{table}[ht]
-\caption{
+\caption{%
 Default initializers for built-in combiners
 }
 \label{tab:init}
