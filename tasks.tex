@@ -1,0 +1,19 @@
+\clause{Task execution}
+
+\added{This clause is new.}
+
+\pnum
+A task is permitted to execute
+in either the invoking OS thread
+or an OS thread implicitly created by the implementation
+to support task execution.
+Independent tasks executing in the same OS thread
+are indeterminately sequenced with respect to one another.
+Independent tasks executing in different OS threads
+are unsequenced with respect to one another.
+
+\pnum
+The completion of a task synchronizes
+with the completion of the associated task block,
+or with the next execution of a sync statement
+within the associated task block.

@@ -1,5 +1,5 @@
-\clause{Spawning tasks}
-\sclause{Task statements}
+\clause{Task statements}
+\sclause{Introduction}
 
 \pnum
 The grammar of a statement (6.8, paragraph 1)
@@ -39,6 +39,9 @@ At the end of the contained compound statement,
 all child tasks spawned directly or indirectly
 within the compound statement are
 \defn{joined}:
+\added{%
+the execution of the following statement is dependent
+on all tasks spawned within the compound statement; i.e.,}
 the statement following the task block is not executed
 until all of the child tasks complete.
 \footnote{EN:
@@ -103,6 +106,7 @@ Is a branch allowed into or out of a spawned statement?
 
 \ssclause*{Semantics}
 \pnum
+\removed{%
 Creates a child task of the associated task block
 of the task spawn statement,
 in which the contained compound statement is executed.
@@ -112,7 +116,11 @@ following the spawn statement.
 The completion of the task synchronizes
 with the completion of the associated task block,
 or with the next execution of a sync statement
-within the associated task block.
+within the associated task block.}
+\added{%
+The contained compound statement is executed as a task,
+independent of the continued execution
+of the associated task block.}
 
 \sclause{The task sync statement}
 \ssclause*{Syntax}
@@ -139,6 +147,11 @@ of the task sync statement.
 \nontermdef{task-call-statement}
 \br
 \terminal{_Task_parallel} \terminal{_Call} expression-statement
+\end{bnf}
+\ssclause*{Constraints}
+
+\pnum
+A task spawning call statement shall have an associated task block.
 \footnote{EN:
 Using the same keyword pair
 for the statement prefix and the function specifier
@@ -148,11 +161,6 @@ are sometimes needed
 to disambiguate a declaration from a statement.
 Is this what we want?
 }
-\end{bnf}
-\ssclause*{Constraints}
-
-\pnum
-A task spawning call statement shall have an associated task block.
 
 \ssclause*{Semantics}
 
@@ -161,8 +169,21 @@ The contained expression statement is executed normally.
 Any called spawning function is allowed to spawn tasks;
 any such tasks are associated with the associated task block
 of the task spawning call statement,
-and are unsequenced with respect to the statements of the task block
+and are
+\removed{unsequenced with respect to}
+\added{independent of}
+the statements of the task block
 following the task spawning call statement.
+
+\begin{note}
+\added{%
+A call to a task spawning function need not be
+the ``outermost'' operation of the expression statement.
+A task spawning call statement
+might invoke more than one spawning function,
+or might invoke none.
+}
+\end{note}
 
 \sclause{The spawning function specifier}
 \ssclause*{Syntax}

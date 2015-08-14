@@ -43,7 +43,10 @@ Adapted from the C++ standard.
 \definition{task}{
 thread of execution within a program
 that can be correctly executed asynchronously
-with respect to (certain) other parts of the program
+with respect to
+\removed{(certain) other parts of}
+\added{independent threads of execution from}
+the program
 }
 
 \definition{concurrent program}{
@@ -57,7 +60,10 @@ is a concurrent program.
 \end{example}
 
 \definition{parallel program}{
-program whose computation is divided into tasks,
+program whose computation
+\removed{is divided into}
+\added{involves independent}
+tasks,
 which may be distributed across multiple computational units
 to be executed simultaneously
 }

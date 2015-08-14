@@ -75,9 +75,16 @@ and shall satisfy all the constraints of a counted loop.
 In a parallel loop with the
 \tcode{_Task_parallel}
 loop qualifier,
-each iteration is a separate task,
-which is unsequenced with respect to
+each iteration is
+\removed{a separate task, which is unsequenced with respect to}
+\added{executed as a task, independent of}
 all other iterations of that execution of the loop.
+\added{%
+The statement following the parallel loop
+is dependent on every iteration of the parallel loop.}
+\footnote{%
+EN: Should this instead be expressed as a join?
+}
 
 \pnum
 If loop parameters are specified as part of the loop qualifiers,
