@@ -91,7 +91,7 @@ one of the following:
 an unqualified arithmetic type,
 a pointer to object type,
 or a complete structure or union type.%
-\footnote{EN:
+\footnote{\added{TODO}:
 Alternatively: it shall not be
 an incomplete or array or function
 or pointer-to-function or qualified type.
@@ -258,7 +258,7 @@ and the specified combiner is in
 \tref{tab:init},
 the view is initialized with the corresponding value from
 \tref{tab:init}.
-\footnote{EN:
+\footnote{\added{TODO}:
 It's not clear that what we have is complete
 considering dynamically-allocated reduction objects.
 }
@@ -386,7 +386,7 @@ might yield nondeterministic results that differ from the serialization.
 \end{note}
 
 \item[\tcode{_Serial}]
-\footnote{EN:
+\footnote{\added{TODO}:
 Neither Cilk nor OpenMP provides this sort of guarantee.
 Should CPLEX include it?
 }
@@ -423,7 +423,7 @@ If the combiner aspect of a reduction type is
 \tcode{_Last},
 the default for the order aspect is
 \tcode{_Associative}.%
-\footnote{EN:
+\footnote{\added{TODO}:
 There was some sentiment for a stronger statement: that
 \tcode{_Last}
 should be required to be satisfy the associative constraint
@@ -727,7 +727,7 @@ of subclause 6.7.9 ``Initializers":
 
 \begin{quote}
 Any initializer for an object of reduction type initializes its root view.
-\footnote{EN:
+\footnote{\added{TODO}:
 At the time it was incorporated into this document,
 the reduction proposal added:
 "If an object of reduction type is not initialized explicitly,
@@ -739,7 +739,7 @@ But this conflicted with the direction CPLEX approved (I think).
 \sclause{Integration with the C++ standard}
 
 Add new entries to table 3 in subclause 2.11 ``Keywords'':%
-\footnote{EN:
+\footnote{\added{TODO}:
 This section is currently just an outline, and needs to be filled in.
 }
 

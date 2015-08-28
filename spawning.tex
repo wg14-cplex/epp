@@ -44,10 +44,10 @@ the execution of the following statement is dependent
 on all tasks spawned within the compound statement; i.e.,}
 the statement following the task block is not executed
 until all of the child tasks complete.
-\footnote{EN:
+\footnote{\added{TODO}:
 Is a branch allowed into or out of a task block?
 }
-\footnote{EN:
+\footnote{\added{TODO}:
 What about C++ EH?
 }
 
@@ -100,7 +100,7 @@ is not part of any task block.
 
 \pnum
 A task spawn statement shall have an associated task block.
-\footnote{EN:
+\footnote{\added{TODO}:
 Is a branch allowed into or out of a spawned statement?
 }
 
@@ -152,7 +152,7 @@ of the task sync statement.
 
 \pnum
 A task spawning call statement shall have an associated task block.
-\footnote{EN:
+\footnote{\added{TODO}:
 Using the same keyword pair
 for the statement prefix and the function specifier
 introduces a case where three tokens of lookahead
@@ -204,7 +204,7 @@ on any declaration of a function,
 it shall appear on every declaration of that function.
 A function declared with a spawning function specifier
 shall be called only from a task spawning call statement.
-\footnote{EN:
+\footnote{\added{TODO}:
 Is a spawning function specifier part of the function's type?
 If so, are function-pointer conversions allowed?
 }
