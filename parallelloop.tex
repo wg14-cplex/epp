@@ -76,13 +76,11 @@ In a parallel loop with the
 \tcode{_Task_parallel}
 loop qualifier,
 each iteration is
-\removed{a separate task, which is unsequenced with respect to}
-\added{executed as a task, independent of}
+executed as a task, independent of
 all other iterations of that execution of the loop.
-\added{%
 The statement following the parallel loop
-is dependent on every iteration of the parallel loop.}
-\footnote{\added{TODO}:
+is dependent on every iteration of the parallel loop.
+\footnote{TODO:
 Should this instead be expressed as a join?
 }
 
@@ -90,7 +88,7 @@ Should this instead be expressed as a join?
 If loop parameters are specified as part of the loop qualifiers,
 the contained expression shall have type
 \pfx{loop_params_t},%
-\footnote{\added{TODO}:
+\footnote{TODO:
 This should probably be
 ``pointer to \pfx{loop_params_t}'',
 for consistency with the first argument of the set/get macros.
