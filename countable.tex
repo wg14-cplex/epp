@@ -373,10 +373,16 @@ for the control variable.
 The
 \defn{iteration count}
 is computed according to
-\tref{tab:itcount}.%
-\footnote{TODO:
-We need to say something about error cases.
-}
+\tref{tab:itcount}.
+If the controlling expression uses a relational operator,
+and is true when the value of the control variable
+is less than (respectively, greater than)
+the value of the limit expression,
+then the operator in the single-increment for the control variable
+shall not be
+\tcode{--}
+(respectively,
+\tcode{++}).
 The iteration count is computed after the loop initialization is performed,
 and before the control variable is modified by the loop.
 \begin{cpp}

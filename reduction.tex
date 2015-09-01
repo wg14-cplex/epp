@@ -14,7 +14,6 @@ to support common parallel computations.
 \sclause{Reduction specifiers}
 \ssclause*{Syntax}
 
-\pnum
 \begin{bnf}
 \nontermdef{reduction-specifier}
 \br
@@ -74,8 +73,6 @@ builtin-combiner-operation
 \terminal{_Commutative}
 \br
 \terminal{_Associative}
-\br
-\terminal{_Serial}
 \end{bnf}
 
 \ssclause*{Constraints}
@@ -90,12 +87,7 @@ The proxied type of a reduction shall be
 one of the following:
 an unqualified arithmetic type,
 a pointer to object type,
-or a complete structure or union type.%
-\footnote{TODO:
-Alternatively: it shall not be
-an incomplete or array or function
-or pointer-to-function or qualified type.
-}
+or a complete structure or union type.
 
 \pnum
 If the combiner is a constant expression,
@@ -385,6 +377,7 @@ Operations that are sensitive to operation grouping
 might yield nondeterministic results that differ from the serialization. 
 \end{note}
 
+\begin{comment}
 \item[\tcode{_Serial}]
 \footnote{TODO:
 Neither Cilk nor OpenMP provides this sort of guarantee.
@@ -415,21 +408,14 @@ in order to ensure this (fully deterministic) modification order.
 If so, there need not be more than one view,
 and the combiner operation might not be invoked at all. 
 \end{note}
-
+\end{comment}
 \end{description}
 
 \pnum
 If the combiner aspect of a reduction type is
 \tcode{_Last},
 the default for the order aspect is
-\tcode{_Associative}.%
-\footnote{TODO:
-There was some sentiment for a stronger statement: that
-\tcode{_Last}
-should be required to be satisfy the associative constraint
-even if a weaker order constraint is specified.
-But specifying it this way seemed easier and more natural.
-}
+\tcode{_Associative}.
 Otherwise, the default for the order aspect is
 \tcode{_Commutative}.
 \footnote{DFEP:
@@ -469,6 +455,7 @@ members with compatible types are initialized.
 
 \sclause{Reduction conversions}
 
+\pnum
 An lvalue with reduction type is implicitly converted,
 through a run-time view lookup,
 to an lvalue with its corresponding proxied type.

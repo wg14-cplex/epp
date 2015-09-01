@@ -31,6 +31,18 @@ task-call-statement
 \terminal{_Task_parallel} \terminal{_Block} compound-statement
 \end{bnf}
 
+\ssclause*{Constraints}
+
+\pnum
+There shall be no
+\tcode{return},
+\tcode{break},
+\tcode{goto}
+or
+\tcode{switch}
+statement that might transfer control into or out of
+a task block statement.
+
 \ssclause*{Semantics}
 
 \pnum
@@ -43,9 +55,6 @@ the execution of the following statement is dependent
 on all tasks spawned within the compound statement; i.e.,
 the statement following the task block is not executed
 until all of the child tasks complete.
-\footnote{TODO:
-Is a branch allowed into or out of a task block?
-}
 \footnote{TODO:
 What about C++ EH?
 }
@@ -99,9 +108,16 @@ is not part of any task block.
 
 \pnum
 A task spawn statement shall have an associated task block.
-\footnote{TODO:
-Is a branch allowed into or out of a spawned statement?
-}
+
+\pnum
+There shall be no
+\tcode{return},
+\tcode{break},
+\tcode{goto}
+or
+\tcode{switch}
+statement that might transfer control into or out of
+a task spawn statement.
 
 \ssclause*{Semantics}
 \pnum
