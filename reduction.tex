@@ -73,6 +73,8 @@ builtin-combiner-operation
 \terminal{_Commutative}
 \br
 \terminal{_Associative}
+\removed{\br
+\terminal{_Serial}}
 \end{bnf}
 
 \ssclause*{Constraints}
@@ -377,8 +379,8 @@ Operations that are sensitive to operation grouping
 might yield nondeterministic results that differ from the serialization. 
 \end{note}
 
+\item[\tcode{\removed{_Serial}}]
 \begin{comment}
-\item[\tcode{_Serial}]
 \footnote{TODO:
 Neither Cilk nor OpenMP provides this sort of guarantee.
 Should CPLEX include it?

@@ -78,16 +78,15 @@ loop qualifier,
 each iteration is
 executed as a task, independent of
 all other iterations of that execution of the loop.
-The statement following the parallel loop
-is dependent on every iteration of the parallel loop.
-\footnote{TODO:
-Should this instead be expressed as a join?
-}
+\removed{The statement following the parallel loop
+is dependent on every iteration of the parallel loop.}
+\added{At the end of the loop,
+execution joins with all of these tasks.}
 
 \pnum
 If loop parameters are specified as part of the loop qualifiers,
 the contained expression shall have type
-``pointer to \pfx{loop_params_t}'',
+``\added{pointer to} \pfx{loop_params_t}'',
 as defined in header
 \tcode{<cplex.h>}.%
 \footnote{DFEP:

@@ -9,8 +9,20 @@ Independent tasks executing in the same OS thread
 are indeterminately sequenced with respect to one another.
 Independent tasks executing in different OS threads
 are unsequenced with respect to one another.
+\footnote{TODO:
+The expectation is that there is a direct mapping
+from a thread managed by the C11
+\tcode{thrd}
+functions to an OS thread.
+}
 
 \pnum
+\added{%
+When execution of an independent task completes,
+execution
+\defn{joins}
+with a its parent task.
+}
 The completion of a task synchronizes
 with the completion of the associated task block,
 or with the next execution of a sync statement
