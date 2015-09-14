@@ -48,15 +48,9 @@ a task block statement.
 \pnum
 Defines a task block, within which tasks can be spawned.
 At the end of the contained compound statement,
-\added{execution joins with}
+execution joins with
 all child tasks spawned directly or indirectly
 within the compound statement.
-\removed{are
-\defn{joined}:
-the execution of the following statement is dependent
-on all tasks spawned within the compound statement; i.e.,
-the statement following the task block is not executed
-until all of the child tasks complete.}
 \footnote{TODO:
 What about C++ EH?
 }
@@ -143,8 +137,7 @@ A task sync statement shall have an associated task block.
 
 \ssclause*{Semantics}
 \pnum
-\removed{Joins}
-\added{Execution joins with}
+Execution joins with
 all child tasks of the associated task block
 of the task sync statement.
 
