@@ -1,0 +1,177 @@
+\clause{Captures}
+
+\sclause{Introduction}
+
+\pnum
+A spawn capture allows a spawn statement
+to make a copy of a variable
+prior to the start of asynchronous execution.
+A reduction capture allows a task block or parallel loop
+to temporarily associate a reduction object
+with an existing object,
+to simplify parallel computation of a reduction.
+
+\sclause{Spawn captures}
+
+\ssclause*{Syntax}
+
+\begin{bnf}
+\nontermdef{spawn-capture}
+\br
+\terminal{_Capture} \terminal{(} spawn-capture-list \terminal{)}
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{spawn-capture-list}
+\br
+spawn-capture-item
+\br
+spawn-capture-list \terminal{,} spawn-capture-item
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{spawn-capture-item}
+\br
+identifier
+\br
+identifier \terminal{=} expression
+\end{bnf}
+
+\ssclause*{Constraints}
+
+\pnum
+If no expression is present in a spawn capture item,
+the identifier shall be a name that is already in scope
+at the beginning of the spawn capture item,
+and the effective expression is taken to be the same as the identifier.
+Otherwise, the effective expression
+is the expression in the spawn capture item.
+
+\pnum
+The effective expression shall have complete object type.
+
+\ssclause*{Semantics}
+
+\pnum
+Each spawn capture item declares a new object
+named by the item's identifier,
+having automatic storage duration.
+The type of the declared object is that of the effective expression.
+The scope of the name extends from the end of the spawn capture item
+until the end of the spawn statement with which it is associated.
+
+\pnum
+The declared object is initialized
+with the value of the effective expression.
+The initialization of the declared object
+occurs before asynchronous execution
+of the spawned compound statement.
+
+\pnum
+Change the first sentence of paragraph 3 of subclause 6.3.2.1:
+\footnote{\added{TODO}:
+This change is necessary only to be able to capture/copy a whole array.
+Do we want to allow that?
+OpenMP seems to support it.
+}
+
+\begin{quote}
+Except when it
+\added{is the effective expression in a spawn capture item, or}
+is the operand of the \tcode{sizeof} operator,
+the \tcode{_Alignof} operator,
+or the unary \tcode{\&} operator,
+or is a string literal used to initialize an array,
+an expression that has type ``array of type''
+is converted to an expression with type ``pointer to type''
+that points to the initial element of the array object
+and is not an lvalue. ...
+\end{quote}
+
+\sclause{Reduction captures}
+
+\ssclause*{Syntax}
+
+\begin{bnf}
+\nontermdef{reduction-capture}
+\br
+\terminal{_Reduction} \terminal{(} reduction-capture-list \terminal{)}
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{reduction-capture-list}
+\br
+reduction-capture-item
+\br
+reduction-capture-list \terminal{,} reduction-capture-item
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{reduction-capture-item}
+\br
+declaration-specifiers declarator
+\br
+declaration-specifiers declarator \terminal{:} expression
+\end{bnf}
+
+\ssclause*{Constraints}
+
+\pnum
+The declaration specifiers in a reduction capture item
+shall specify a reduction type,
+and shall not specify static or thread storage duration.
+
+\pnum
+If no expression is present in a reduction capture item,
+the identifier in the declarator
+shall be a name that is already in scope
+at the beginning of the reduction capture item,
+and the effective expression is taken to be the same as the identifier.
+Otherwise, the effective expression
+is the expression in the reduction capture item.
+
+\pnum
+The effective expression shall be a modifiable lvalue,
+and shall have a type that is assignable to the proxied type
+of the item's reduction type.
+\footnote{\added{TODO}:
+Would it be better to require the effective expression type
+to match the proxied type?
+}
+
+\ssclause*{Semantics}
+
+\pnum
+Each reduction capture item declares a new object,
+named by the identifier in the declarator.
+The type of the object is the type specified by the declaration specifiers.
+The scope of the name extends from the end of the reduction capture item
+until the end of the task block or loop with which it is associated.
+
+\pnum
+Before execution of the task block or loop,
+the new reduction object is initialized
+with the value of the object designated by the effective expression.
+Upon completion of the task block or loop,
+the value of the reduction object is assigned back
+to the object designated by the effective expression.
+
+\pnum
+Change the first sentence of paragraph 2 of subclause 6.3.2.1:
+
+\begin{quote}
+Except when it
+\added{is the expression in a reduction capture item, or}
+is the operand of the \tcode{sizeof} operator,
+the \tcode{_Alignof} operator, the
+unary \tcode{\&} operator,
+the \tcode{++} operator,
+the \tcode{--} operator,
+or the left operand of the \tcode{.} operator
+or an assignment operator,
+an lvalue that does not have array type
+is converted to the value stored in the designated object
+(and is no longer an lvalue);
+this is called
+\defn{lvalue conversion}. ...
+\end{quote}

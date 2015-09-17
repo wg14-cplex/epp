@@ -58,13 +58,21 @@ The following rules are added to the grammar:
 \begin{bnf}
 \nontermdef{loop-qualifiers}
 \br
-\terminal{_Task_parallel} loop-parameters\opt
+\terminal{_Task_parallel} qualifier-clauses\opt
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{qualifier-clauses}
+\br
+loop-parameters qualifier-clauses\opt
+\br
+reduction-capture qualifier-clauses\opt
 \end{bnf}
 
 \begin{bnf}
 \nontermdef{loop-parameters}
 \br
-\terminal{[} expression \terminal{]}
+\terminal{_Options} \terminal{(} expression \terminal{)}
 \end{bnf}
 
 \pnum

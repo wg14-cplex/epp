@@ -28,7 +28,7 @@ task-call-statement
 \begin{bnf}
 \nontermdef{task-block-statement}
 \br
-\terminal{_Task_parallel} \terminal{_Block} compound-statement
+\terminal{_Task_parallel} \terminal{_Block} reduction-capture\opt{} compound-statement
 \end{bnf}
 
 \ssclause*{Constraints}
@@ -97,7 +97,7 @@ is not part of any task block.
 \begin{bnf}
 \nontermdef{task-spawn-statement}
 \br
-\terminal{_Task_parallel} \terminal{_Spawn} compound-statement
+\terminal{_Task_parallel} \terminal{_Spawn} spawn-capture\opt{} compound-statement
 \end{bnf}
 
 \ssclause*{Constraints}

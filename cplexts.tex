@@ -46,7 +46,7 @@
 % These parameters, and the documentclass options,
 % are about document identification and overall formatting.
 \newcommand{\cplexts}{$CPLEXTS$}
-\renewcommand{\extrahead}{2015-09-11}
+\renewcommand{\extrahead}{2015-09-14 N????}
 \standard{\cplexts}
 \yearofedition{2017}
 \languageofedition{(E)}
@@ -157,13 +157,15 @@ It will not survive to final publication.
 
 \include{tasks}
 
+\include{reduction}
+
+\include{capture}
+
 \include{countable}
 
 \include{parallelloop}
 
 \include{spawning}
-
-\include{reduction}
 
 \include{loopparameter}
 
@@ -180,7 +182,7 @@ Language Extension Specification,}
 \isourl{http://www.openmp.org/mp-documents/OpenMP4.0.0.pdf}
 \end{references}
 
-% we definitely want a multi-column index, but we don't get one by default
-\twocolumn % even adding this doesn't get the job done
+% we definitely want a two-column index
+% but I can't figure out how to get one
 \printindex
 \end{document}
