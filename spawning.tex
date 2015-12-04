@@ -35,13 +35,14 @@ task-call-statement
 
 \pnum
 There shall be no
-\tcode{return},
-\tcode{break},
-\tcode{goto}
-or
 \tcode{switch}
-statement that might transfer control into or out of
+or jump statement that might transfer control into or out of
 a task block statement.
+\footnote{TODO:
+Should task block and/or task spawn be added to the list of statements
+terminated by
+\tcode{break}?
+}
 
 \ssclause*{Semantics}
 
@@ -107,13 +108,14 @@ A task spawn statement shall have an associated task block.
 
 \pnum
 There shall be no
-\tcode{return},
-\tcode{break},
-\tcode{goto}
-or
 \tcode{switch}
-statement that might transfer control into or out of
+or jump statement that might transfer control into or out of
 a task spawn statement.
+\footnote{TODO:
+Exiting a task spawn or task block with
+\tcode{longjmp}
+should be undefined behavior.
+}
 
 \ssclause*{Semantics}
 \pnum

@@ -57,6 +57,9 @@ Each spawn capture item declares a new object
 named by the item's identifier,
 having automatic storage duration.
 The type of the declared object is that of the effective expression.
+\footnote{TODO:
+Should this object be const-qualified?
+}
 The scope of the name extends from the end of the spawn capture item
 until the end of the spawn statement with which it is associated.
 
@@ -69,7 +72,7 @@ of the spawned compound statement.
 
 \pnum
 Change the first sentence of paragraph 3 of subclause 6.3.2.1:
-\footnote{\added{TODO}:
+\footnote{TODO:
 This change is necessary only to be able to capture/copy a whole array.
 Do we want to allow that?
 OpenMP seems to support it.
@@ -134,7 +137,7 @@ is the expression in the reduction capture item.
 The effective expression shall be a modifiable lvalue,
 and shall have a type that is assignable to the proxied type
 of the item's reduction type.
-\footnote{\added{TODO}:
+\footnote{TODO:
 Would it be better to require the effective expression type
 to match the proxied type?
 }

@@ -16,6 +16,7 @@ The purpose of these constraints is to ensure that
 the loop's iteration count can be computed
 before the loop body is executed.
 
+\sclause{Constraints on all counted loops}
 \pnum
 There shall be no
 \tcode{return},
@@ -24,6 +25,11 @@ There shall be no
 or
 \tcode{switch}
 statement that might transfer control into or out of a counted loop.
+
+\pnum
+Attempting to terminate a counted loop with
+\tcode{longjmp}
+produces undefined behavior.
 
 \sclause{Constraints on a counted \tcode{for} statement}
 \ssclause{Introduction}
@@ -482,7 +488,10 @@ then the behavior is undefined
 if the computed iteration count is not greater than zero.
 If the computed iteration count is not representable
 as a value of type
+\tcode{uintmax_t},
+\begin{cpp}
 \tcode{unsigned long long},
+\end{cpp}
 the behavior is undefined.
 
 \ssclause{Evaluation relaxations}
