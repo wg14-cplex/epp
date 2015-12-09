@@ -52,9 +52,6 @@ At the end of the contained compound statement,
 execution joins with
 all child tasks spawned directly or indirectly
 within the compound statement.
-\footnote{TODO:
-What about C++ EH?
-}
 
 \pnum
 For a given statement, the
@@ -92,6 +89,14 @@ by means other than a task statement
 is not part of any task block.
 \end{note}
 
+\pnum
+Attempting to terminate a task block with
+\tcode{longjmp}
+produces undefined behavior.
+\footnote{TODO:
+What about C++ EH?
+}
+
 \sclause{The task spawn statement}
 \ssclause*{Syntax}
 
@@ -111,17 +116,22 @@ There shall be no
 \tcode{switch}
 or jump statement that might transfer control into or out of
 a task spawn statement.
-\footnote{TODO:
-Exiting a task spawn or task block with
+
+\pnum
+Attempting to terminate a task spawn statement with
 \tcode{longjmp}
-should be undefined behavior.
-}
+produces undefined behavior.
 
 \ssclause*{Semantics}
 \pnum
 The contained compound statement is executed as a task,
 independent of the continued execution
 of the associated task block.
+\footnote{TODO:
+Should there be some constraint(s) on references
+from a task spawn statement
+to the name of an object declared outside the statement?
+}
 
 \sclause{The task sync statement}
 \ssclause*{Syntax}
