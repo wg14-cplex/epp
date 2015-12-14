@@ -1,5 +1,5 @@
 # pdflatex does not work with this document
-PDFLATEX="-lualatex"
+PDFLATEX=-lualatex
 
 all:
 	latexmk -pdf $(PDFLATEX) -silent cplexts
