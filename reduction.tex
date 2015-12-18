@@ -11,6 +11,11 @@ and an associated combiner operation,
 along with other optional aspects,
 to support common parallel computations.
 
+\pnum
+Attempting to access an object with reduction type
+and either thread or allocated storage duration
+results in undefined behavior.
+
 \sclause{Reduction specifiers}
 \ssclause*{Syntax}
 
@@ -86,11 +91,8 @@ in a reduction specifier.
 The proxied type of a reduction shall be
 one of the following:
 an unqualified arithmetic type,
-\footnote{TODO:
-Apparently this doesn't rule out atomic types.
-}
-a pointer to object type,
-or a complete structure or union type.
+an unqualified pointer to object type,
+or an unqualified complete structure or union type.
 
 \pnum
 If the combiner is a constant expression,
@@ -98,11 +100,9 @@ then it shall be an address constant
 referring to a function taking two arguments,
 both of pointer-to-proxied type.
 If it is a compound assignment operator,
-then it shall be one that is usable with
-\footnote{TODO:
-Not clear with respect to pointers.
-}
-an lvalue of the proxied type.%
+then it shall be one
+for which the constraints of the corresponding combination method
+are satisfied using lvalues having the proxied type.%
 \footnote{
 For example, if the proxied type is a floating type,
 the operator shall not be
