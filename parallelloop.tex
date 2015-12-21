@@ -58,7 +58,7 @@ The following rules are added to the grammar:
 \begin{bnf}
 \nontermdef{loop-qualifiers}
 \br
-\terminal{_Task_parallel} qualifier-clauses\opt
+\terminal{_Task} qualifier-clauses\opt
 \end{bnf}
 
 \begin{bnf}
@@ -81,7 +81,7 @@ and shall satisfy all the constraints of a counted loop.
 
 \pnum
 In a parallel loop with the
-\tcode{_Task_parallel}
+\tcode{_Task}
 loop qualifier,
 each iteration is
 executed as a task, independent of

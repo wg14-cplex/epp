@@ -28,7 +28,7 @@ task-call-statement
 \begin{bnf}
 \nontermdef{task-block-statement}
 \br
-\terminal{_Task_parallel} \terminal{_Block} reduction-capture\opt{} compound-statement
+\terminal{_Task} \terminal{_Block} reduction-capture\opt{} compound-statement
 \end{bnf}
 
 \ssclause*{Constraints}
@@ -103,7 +103,7 @@ What about C++ EH?
 \begin{bnf}
 \nontermdef{task-spawn-statement}
 \br
-\terminal{_Task_parallel} \terminal{_Spawn} spawn-capture\opt{} compound-statement
+\terminal{_Task} \terminal{_Spawn} spawn-capture\opt{} compound-statement
 \end{bnf}
 
 \ssclause*{Constraints}
@@ -139,7 +139,7 @@ to the name of an object declared outside the statement?
 \begin{bnf}
 \nontermdef{task-sync-statement}
 \br
-\terminal{_Task_parallel} \terminal{_Sync} \terminal{;}
+\terminal{_Task} \terminal{_Sync} \terminal{;}
 \end{bnf}
 
 \ssclause*{Constraints}
@@ -158,7 +158,7 @@ of the task sync statement.
 \begin{bnf}
 \nontermdef{task-call-statement}
 \br
-\terminal{_Task_parallel} \terminal{_Call} expression-statement
+\terminal{_Task} \terminal{_Call} expression-statement
 \end{bnf}
 \ssclause*{Constraints}
 
@@ -203,7 +203,7 @@ A new alternative is added to the grammar of function specifier
 \begin{bnf}
 \nontermdef{function-specifier}
 \br
-\terminal{_Task_parallel} \terminal{_Call}
+\terminal{_Task} \terminal{_Call}
 \end{bnf}
 
 \ssclause*{Constraints}

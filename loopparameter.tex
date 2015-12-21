@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
         cplex_set_num_threads(&hints, atoi(argv[1]));
     }
     cplex_set_chunk_size(&hints, 1000);
-    _Task_parallel _Options(&hints) for (long i = 0; i < 1000000; i++) {
+    _Task _Options(&hints) for (long i = 0; i < 1000000; i++) {
         do_something_with(i);
     }
 }
