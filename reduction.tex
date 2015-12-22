@@ -191,6 +191,27 @@ is unused after being combined with
 $into\_view$
 except as the argument to the finalizer.
 
+\begin{note}
+There is no guarantee which thread will execute the combiner
+between two concurrent tasks.
+As a result, use of thread-local state by a combiner
+is not fully reliable.
+The floating-point environment
+(\tcode{<fenv.h>})
+is an example of thread-local state.
+Therefore, to reliably use the floating-point environment
+with combiner operations,
+a copy of the floating-point environment should be incorporated
+into the proxied type of the reduction.
+At the beginning of the combiner function,
+the floating-point environment should be saved in a local object,
+and loaded from the destination view.
+At the end of the combiner function,
+the floating-point environment should be saved
+back to the destination view,
+and reloaded from the local object.
+\end{note}
+
 \begin{table}[ht]
 \caption{%
 Combination method for built-in combiners
