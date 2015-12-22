@@ -57,9 +57,6 @@ Each spawn capture item declares a new object
 named by the item's identifier,
 having automatic storage duration.
 The type of the declared object is that of the effective expression.
-\footnote{TODO:
-Should this object be const-qualified?
-}
 The scope of the name extends from the end of the spawn capture item
 until the end of the spawn statement with which it is associated.
 
@@ -72,11 +69,6 @@ of the spawned compound statement.
 
 \pnum
 Change the first sentence of paragraph 3 of subclause 6.3.2.1:
-\footnote{TODO:
-This change is necessary only to be able to capture/copy a whole array.
-Do we want to allow that?
-OpenMP seems to support it.
-}
 
 \begin{quote}
 Except when it

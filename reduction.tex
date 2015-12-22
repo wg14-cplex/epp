@@ -190,11 +190,6 @@ $from\_view$
 is unused after being combined with
 $into\_view$
 except as the argument to the finalizer.
-\footnote{TODO:
-How does
-\tcode{FENV_ACCESS}
-affect reductions?
-}
 
 \begin{table}[ht]
 \caption{%
@@ -262,10 +257,6 @@ and the specified combiner is in
 \tref{tab:init},
 the view is initialized with the corresponding value from
 \tref{tab:init}.
-\footnote{TODO:
-It's not clear that what we have is complete
-considering dynamically-allocated reduction objects.
-}
 
 \begin{table}[ht]
 \caption{%
@@ -728,22 +719,12 @@ of subclause 6.7.9 ``Initializers":
 
 \begin{quote}
 Any initializer for an object of reduction type initializes its root view.
-\footnote{TODO:
-At the time it was incorporated into this document,
-the reduction proposal added:
-"If an object of reduction type is not initialized explicitly,
-then the root view is initialized as every other view is initialized."
-But this conflicted with the direction CPLEX approved (I think).
-}
 \end{quote}
 
 \begin{cpp}
 \sclause{Integration with the C++ standard}
 
 Add new entries to table 3 in subclause 2.11 ``Keywords'':
-\footnote{TODO:
-This section is currently just an outline, and needs to be filled in.
-}
 
 Change paragraph 3 of subclause 3.3.2 ``Point of declaration":
 

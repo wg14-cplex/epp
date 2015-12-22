@@ -38,11 +38,6 @@ There shall be no
 \tcode{switch}
 or jump statement that might transfer control into or out of
 a task block statement.
-\footnote{TODO:
-Should task block and/or task spawn be added to the list of statements
-terminated by
-\tcode{break}?
-}
 
 \ssclause*{Semantics}
 
@@ -93,9 +88,6 @@ is not part of any task block.
 Attempting to terminate a task block with
 \tcode{longjmp}
 produces undefined behavior.
-\footnote{TODO:
-What about C++ EH?
-}
 
 \sclause{The task spawn statement}
 \ssclause*{Syntax}
@@ -127,11 +119,6 @@ produces undefined behavior.
 The contained compound statement is executed as a task,
 independent of the continued execution
 of the associated task block.
-\footnote{TODO:
-Should there be some constraint(s) on references
-from a task spawn statement
-to the name of an object declared outside the statement?
-}
 
 \sclause{The task sync statement}
 \ssclause*{Syntax}
@@ -164,15 +151,6 @@ of the task sync statement.
 
 \pnum
 A task spawning call statement shall have an associated task block.
-\footnote{TODO:
-Using the same keyword pair
-for the statement prefix and the function specifier
-introduces a case where three tokens of lookahead
-(and hopefully no more)
-are sometimes needed
-to disambiguate a declaration from a statement.
-Is this what we want?
-}
 
 \ssclause*{Semantics}
 
@@ -213,7 +191,3 @@ on any declaration of a function,
 it shall appear on every declaration of that function.
 A function declared with a spawning function specifier
 shall be called only from a task spawning call statement.
-\footnote{TODO:
-Is a spawning function specifier part of the function's type?
-If so, are function-pointer conversions allowed?
-}
