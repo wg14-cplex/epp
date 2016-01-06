@@ -261,7 +261,10 @@ $into\_view$ \tcode{=} $from\_view$ \tcode{;}
 \pnum
 At some unspecified point
 before a task refers to a reduction object for the first time,
-the view used by the task is allocated, and initialized
+the view used by the task is allocated and initialized.
+For purposes of initialization,
+the root view behaves like a member of the reduction object.
+Every other view is initialized
 using the initializer of the reduction's type.
 If the initializer is a function pointer,
 the initialization is performed by executing:
@@ -316,10 +319,6 @@ that do not execute concurrently;
 it is not necessary that each task have a distinct view.
 Any initializer function is invoked only once for each distinct view,
 regardless how many tasks share that view.
-The initializer aspect of a reduction type is not used
-to initialize the root view of a reduction object;
-for purposes of initialization,
-the root view behaves like a member of the reduction object. 
 
 \pnum
 If the type of a reduction object has a finalizer,
