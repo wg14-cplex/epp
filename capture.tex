@@ -18,7 +18,7 @@ to simplify parallel computation of a reduction.
 \begin{bnf}
 \nontermdef{spawn-capture}
 \br
-\terminal{_Capture} \terminal{(} spawn-capture-list \terminal{)}
+\terminal{_Copy_in} \terminal{(} spawn-capture-list \terminal{)}
 \end{bnf}
 
 \begin{bnf}
@@ -82,6 +82,26 @@ is converted to an expression with type ``pointer to type''
 that points to the initial element of the array object
 and is not an lvalue. ...
 \end{quote}
+
+\begin{example}
+Consider the following code:
+
+\begin{verbatim}
+// Walk a list and call f() on the value of each element.
+// Calls to f() can be done in parallel.
+_Task _Block {
+    while (p) {
+        _Task _Spawn _Copy_in(p) { f(p->value); }
+        p = p->next;
+    }
+}
+\end{verbatim}
+Without the \tcode{_Copy_in},
+there would be a race on the variable \tcode{p},
+because the call to \tcode{f}
+is allowed to proceed in parallel with the continuation,
+including the update.
+\end{example}
 
 \sclause{Reduction captures}
 
