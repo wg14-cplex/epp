@@ -120,7 +120,18 @@ or
 the proxied type shall be a real arithmetic type.
 
 \pnum
-The initializer of a reduction
+If the combiner aspect of a reduction
+is any of the builtin combiner operations
+other than \tcode{_Last},
+then the initializer of the reduction,
+if specified,
+shall be a constant expression
+suitable to initialize an object of the proxied type
+to the default initializer value
+corresponding to the combiner operation,
+as specified in \tref{tab:init}.
+Otherwise, the initializer of a reduction,
+if specified,
 shall be suitable to initialize
 an object of the proxied type
 having static storage duration,
@@ -130,7 +141,8 @@ it shall refer to a function
 taking one argument of pointer-to-proxied type.
 
 \pnum
-The finalizer of a reduction
+The finalizer of a reduction,
+if specified,
 shall be an address constant referring to a function
 taking one argument of pointer-to-proxied type.
 
@@ -296,11 +308,23 @@ Default initializers for built-in combiners
 \tcode{*=}&
 the value 1, converted to the proxied type
 \\ \hline
+\tcode{+=}&
+the value 0, converted to the proxied type
+\\ \hline
 \tcode{\&=}&
-the bitwise complement of converting zero to the proxied type
+the bitwise complement of converting 0 to the proxied type
+\\ \hline
+\tcode{\textasciicircum=}&
+the value 0, converted to the proxied type
+\\ \hline
+\tcode{|=}&
+the value 0, converted to the proxied type
 \\ \hline
 \tcode{_And}&
 the value 1, converted to the proxied type
+\\ \hline
+\tcode{_Or}&
+the value 0, converted to the proxied type
 \\ \hline
 \tcode{_Min}&
 the maximum value representable by the proxied type
