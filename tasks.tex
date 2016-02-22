@@ -2,12 +2,11 @@
 
 \pnum
 A task is permitted to execute
-in either the invoking OS thread
-or an OS thread implicitly created by the implementation
-to support task execution.
-Independent tasks executing in the same OS thread
+either in the invoking thread
+or in a worker thread implicitly created by the implementation.
+Independent tasks executing in the same thread
 are indeterminately sequenced with respect to one another.
-Independent tasks executing in different OS threads
+Independent tasks executing in different threads
 are unsequenced with respect to one another.
 
 \pnum
@@ -19,3 +18,14 @@ The completion of a task synchronizes
 with the completion of the associated task block,
 or with the next execution of a sync statement
 within the associated task block.
+
+\pnum
+It is unspecified whether a worker thread is reused
+for multiple tasks
+during the execution of a program.
+The lifetimes (creation and termination points)
+of worker threads are unspecified.
+An attempt by the program
+to terminate, detach or join with 
+a worker thread
+results in undefined behavior.

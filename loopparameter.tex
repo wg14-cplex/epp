@@ -117,8 +117,9 @@ The
 \pfx{set_num_threads}
 macro sets to
 \tcode{num_threads}
-the recommended number of execution agents to be used
-to execute the iterations of a parallel loop
+the recommended number of iterations
+to be executed concurrently
+in a parallel loop
 associated with the object pointed to by
 \tcode{hints}.
 
@@ -140,7 +141,7 @@ the recommended maximum number of iterations
 of a parallel loop associated with the object pointed to by
 \tcode{hints}
 to be grouped together to be executed sequentially
-in a single thread of execution.
+as a single task.
 
 \sclause{The \tcode{schedule_kind} parameter}
 \ssclause*{Synopsis}
