@@ -61,7 +61,7 @@ or parallel loop,
 the associated task block is the smallest enclosing task block statement
 or parallel loop.
 Otherwise, for a statement within the body of a function
-declared with the spawning function specifier,
+with spawning function type,
 the associated task block is the same as it was
 at the point of the task spawning call statement
 that invoked the spawning function.
@@ -171,23 +171,3 @@ A task spawning call statement
 might invoke more than one spawning function,
 or might invoke none.
 \end{note}
-
-\sclause{The spawning function specifier}
-\ssclause*{Syntax}
-\pnum
-A new alternative is added to the grammar of function specifier
-(6.7.4 paragraph 1):
-
-\begin{bnf}
-\nontermdef{function-specifier}
-\br
-\terminal{_Task} \terminal{_Call}
-\end{bnf}
-
-\ssclause*{Constraints}
-\pnum
-If a spawning function specifier appears
-on any declaration of a function,
-it shall appear on every declaration of that function.
-A function declared with a spawning function specifier
-shall be called only from a task spawning call statement.

@@ -1,4 +1,4 @@
-\clause{Reduction types}
+\clause{Reduction and spawning function types}
 \sclause{Introduction}
 
 \pnum
@@ -15,6 +15,14 @@ to support common parallel computations.
 Attempting to access an object with reduction type
 and either thread or allocated storage duration
 results in undefined behavior.
+
+\pnum
+The \tcode{_Task _Call}
+qualifier
+(also called the ``spawning function qualifier")
+is in a new syntactic category for qualifiers of function types.
+It can be used to write functions that can spawn tasks
+and return while some of those tasks are still running.
 
 \sclause{Reduction specifiers}
 \ssclause*{Syntax}
@@ -544,6 +552,49 @@ need not point to the reduction object,
 so undefined behavior results if it used as if it did.
 \end{example}
 
+\sclause{Spawning function types}
+
+\ssclause*{Syntax}
+
+\begin{bnf}
+\nontermdef{spawning-function-qualifier}
+\br
+\terminal{_Task}
+\terminal{_Call}
+\end{bnf}
+
+\ssclause*{Constraints}
+
+\pnum
+A call to a function with spawning function type
+shall appear only within a task spawning call statement.
+
+\ssclause*{Semantics}
+
+\pnum
+A function whose declarator
+includes a spawning function qualifier
+has spawning function type.
+Such a function may return to its caller
+while some of its spawned tasks are still executing.
+
+\begin{example}
+~\\
+\begin{verbatim}
+int f(void) _Task _Call;
+int (*g1(void) _Task _Call)(void);
+int (*g2(void))(void) _Task _Call;
+\end{verbatim}
+
+\tcode{f} is declared to be a spawning function
+returning \tcode{int}.
+\tcode{g1} is declared to be a spawning function
+returning a pointer to a (non-spawning) function.
+\tcode{g2} is declared to be a (non-spawning) function
+returning a pointer to a spawning function.
+
+\end{example}
+
 \sclause{Integration with the C standard}
 
 Change paragraph 7 of subclause 6.2.1 ``Scopes of identifiers":
@@ -577,7 +628,8 @@ or
 \end{quote}
 
 Add a new item
-to the list in paragraph 20 of subclause 6.2.5 ``Types":
+to the list in paragraph 20 of subclause 6.2.5 ``Types"
+(following the item for union types):
 
 \begin{quote}
 \begin{itemize}
@@ -590,6 +642,27 @@ called the
 and an associated combiner operation,
 along with other optional aspects,
 to support common parallel computations.
+\end{itemize}
+\end{quote}
+
+Change sub-bullet of paragraph 20 of subclause 6.2.5:
+
+\begin{quote}
+\begin{itemize}
+\item
+A \textit{function type}
+describes a function
+with specified return type.
+A function type is characterized
+by its return type\added{,} \removed{and}
+the number and types of its parameters
+\added{and its set of function qualifiers}.
+A function type is said to be derived from its return type,
+and if its return type is $T$,
+the function type is sometimes called
+``function returning $T$".
+The construction of a function type from a return type
+is called ``function type derivation".
 \end{itemize}
 \end{quote}
 
@@ -714,7 +787,7 @@ The list defines the structure content, union content,
 or enumeration content. ...
 \end{quote}
 
-Change paragraph 9 of 6.7.2.3 ``Tags":
+Change paragraph 9 of 6.7.2.3:
 
 \begin{quote}
 If a type specifier of the form
@@ -741,6 +814,32 @@ then it specifies the same type as that other declaration,
 and does not redeclare the tag.
 \end{quote}
 
+Change the grammar rule in subclause 6.7.6
+``Declarators":
+
+\begin{quote}
+\begin{bnf}
+\nontermdef{direct-declarator}
+\br
+...
+\br
+direct-declarator \terminal{(} parameter-type-list \terminal{)}
+\added{function-qualifiers\opt}
+\br
+...
+\end{bnf}
+\end{quote}
+
+Add a new grammar rule to 6.7.6:
+
+\begin{quote}
+\begin{bnf}
+\nontermdef{function-qualifiers}
+\br
+spawning-function-qualifier
+\end{bnf}
+\end{quote}
+
 Change paragraph 1 of subclause 6.7.6.3
 ``Function declarations (including prototypes)":
 
@@ -750,12 +849,39 @@ that is a function type or an array type
 \added{or a reduction type}.
 \end{quote}
 
-Add a new paragraph following paragraph 8 of subclause 6.7.6.3
-``Function declarations (including prototypes)":
+Add a new paragraph following paragraph 8 of subclause 6.7.6.3:
 
 \begin{quote}
 A declaration of a parameter as a reduction type
 shall be adjusted to be a pointer to the same reduction type.
+\end{quote}
+
+Change paragraph 15 of subclause 6.7.6.3:
+
+\begin{quote}
+For two function types to be compatible,
+both shall specify compatible
+return types\removed{.}\added{,}$^{146)}$
+\added{and both shall specify equivalent
+sets of function qualifiers.}
+Moreover, the parameter type lists, if both are present, shall agree in the number of
+parameters and in use of the ellipsis terminator; corresponding parameters shall have
+compatible types.
+...
+\end{quote}
+
+Change the grammar rule in subclause 6.7.7 ``Type names":
+
+\begin{quote}
+\begin{bnf}
+\nontermdef{direct-abstract-declarator}
+\br
+...
+\br
+direct-abstract-declarator\opt{}
+\terminal{(} parameter-type-list\opt{} \terminal{)}
+\added{function-qualifiers\opt}
+\end{bnf}
 \end{quote}
 
 Add a new paragraph following paragraph 8
