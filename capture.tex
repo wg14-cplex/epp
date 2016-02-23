@@ -132,9 +132,9 @@ declaration-specifiers declarator \terminal{:} expression
 \ssclause*{Constraints}
 
 \pnum
-The declaration specifiers in a reduction capture item
-shall specify a reduction type,
-and shall not specify static or thread storage duration.
+A reduction capture item
+shall have some reduction type,
+and shall not have static or thread storage duration.
 
 \pnum
 If no expression is present in a reduction capture item,
@@ -153,9 +153,8 @@ of the item's reduction type.
 \ssclause*{Semantics}
 
 \pnum
-Each reduction capture item declares a new object,
-named by the identifier in the declarator.
-The type of the object is the type specified by the declaration specifiers.
+Each reduction capture item declares a new object
+with reduction type.
 The scope of the name extends from the end of the reduction capture item
 until the end of the task block or loop with which it is associated.
 
