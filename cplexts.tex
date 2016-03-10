@@ -45,8 +45,8 @@
 
 % These parameters, and the documentclass options,
 % are about document identification and overall formatting.
-\docdate{2016}{02}{22}
-\newcommand{\wgdocno}{}
+\docdate{2016}{03}{10}
+\newcommand{\wgdocno}{N2017}
 \newcommand{\epptsno}{\placeholder{EPPTS}}
 \standard{\epptsno}
 \yearofedition{2018}
@@ -61,13 +61,43 @@
 \textbf{Reply to:} & Clark Nelson
 \end{tabular}
 
-{\Huge
+{\huge
 \bfseries
-Programming languages --- C --- \\
-Extensions for parallel programming
+Programming language C --- \\
+Extensions for parallel programming --- \\
+Part 1: Thread-based parallelism
 }
 
-This is the latest working draft of the CPLEX study group.
+{\large
+The contents of this document match
+the Working Draft of the CPLEX study group adopted on 2016-03-07.
+Only the document identification and title page have been changed.
+
+The consensus of the study group is that this document is ready
+to be transferred to WG14 for further processing
+to produce a Technical Specification.
+However, the study group does not believe its work is done.
+
+This document describes only parallel execution
+that uses multi-processor/multi-core technology.
+The study group believes that further work needs to be done
+to support SIMD/vector technology.
+A goal is that a SIMD parallel loop could be expressed
+in terms almost identical to a parallel loop in this document,
+just by varying a keyword or two.
+Arithmetic on array sections, much as in Fortran,
+could also provide better support for SIMD technology.
+Support for GPGPU technology is also desirable,
+but may be more of a challenge.
+
+The title of this document has been changed
+to better align the expectations of the reader
+with those of the study group.
+However, it should be understood that full planning
+for an ISO/IEC multipart Technical Specification ---
+including determining the title and scope of each part in advance ---
+has not yet been done.
+}
 \clearpage
 \end{cover}
 
