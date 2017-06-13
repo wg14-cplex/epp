@@ -6,6 +6,14 @@
 A spawn capture allows a spawn statement
 to make a copy of a variable
 prior to the start of asynchronous execution.
+\footnote{DFEP:
+This corresponds to the
+\tcode{firstprivate}
+clause of OpenMP.
+Cilk has no corresponding feature;
+it isn't needed, because only a function-call can be spawned,
+and arguments are guaranteed to be evaluated before the spawn happens.
+}
 A reduction capture allows a task block or parallel loop
 to temporarily associate a reduction object
 with an existing object,

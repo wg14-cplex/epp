@@ -10,6 +10,15 @@ called the
 and an associated combiner operation,
 along with other optional aspects,
 to support common parallel computations.
+\footnote{DFEP:
+In OpenMP,
+reductions are expressed using clauses referring to variables,
+not using specific types.
+In Cilk,
+reductions are expressed using reduction types,
+which are class types in C++;
+in C, they are composed using macros.
+}
 
 \pnum
 Attempting to access an object with reduction type
@@ -23,6 +32,11 @@ qualifier
 is in a new syntactic category for qualifiers of function types.
 It can be used to write functions that can spawn tasks
 and return while some of those tasks are still running.
+\footnote{DFEP:
+Cilk does not have this capability.
+In OpenMP, this can be done implicitly,
+without annotating the function.
+}
 
 \sclause{Reduction specifiers}
 \ssclause*{Syntax}
