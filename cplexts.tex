@@ -45,11 +45,11 @@
 
 % These parameters, and the documentclass options,
 % are about document identification and overall formatting.
-\docdate{2016}{03}{10}
-\newcommand{\wgdocno}{N2017}
-\newcommand{\epptsno}{\placeholder{EPPTS}}
+\docdate{2017}{09}{21}
+\newcommand{\wgdocno}{N2170}
+\newcommand{\epptsno}{21938-1}
 \standard{\epptsno}
-\yearofedition{2018}
+\yearofedition{\placeholder{2019}}
 \languageofedition{(E)}
 \renewcommand{\extrahead}{\Year-\Mo-\Dy{} \wgdocno}
 
@@ -69,34 +69,28 @@ Part 1: Thread-based parallelism
 }
 
 {\large
-The contents of this document match
-the Working Draft of the CPLEX study group adopted on 2016-03-07.
-Only the document identification and title page have been changed.
+The only change of technical content
+from N2017 to this document
+is the addition of a new guarantee (with associated note)
+to the task execution clause,
+to address concerns from the OpenMP community
+presented at the Toronto meeting.
 
-The consensus of the study group is that this document is ready
-to be transferred to WG14 for further processing
-to produce a Technical Specification.
-However, the study group does not believe its work is done.
+There are also a few minor editorial changes:
+\begin{itemize}
+\item 
+The actual ISO document number for the Technical Specification
+has been applied.
 
-This document describes only parallel execution
-that uses multi-processor/multi-core technology.
-The study group believes that further work needs to be done
-to support SIMD/vector technology.
-A goal is that a SIMD parallel loop could be expressed
-in terms almost identical to a parallel loop in this document,
-just by varying a keyword or two.
-Arithmetic on array sections, much as in Fortran,
-could also provide better support for SIMD technology.
-Support for GPGPU technology is also desirable,
-but may be more of a challenge.
+\item
+In the Foreword,
+the former description of WG14 as a Technical Committee
+has been corrected.
 
-The title of this document has been changed
-to better align the expectations of the reader
-with those of the study group.
-However, it should be understood that full planning
-for an ISO/IEC multipart Technical Specification ---
-including determining the title and scope of each part in advance ---
-has not yet been done.
+\item
+A few footnotes describing departures from existing practice (DFEP)
+have been added.
+\end{itemize}
 }
 \clearpage
 \end{cover}
@@ -108,7 +102,7 @@ has not yet been done.
 
 ISO/TS
 \epptsno{}
-was prepared by Technical Committee ISO/IEC JTC1/SC22/WG14.
+was prepared by Working Group ISO/IEC JTC1/SC22/WG14.
 \footnote{FYI:
 This is the only paragraph in the Foreword that has anything in it
 that's not just boilerplate.

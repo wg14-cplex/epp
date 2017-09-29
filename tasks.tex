@@ -29,3 +29,29 @@ An attempt by the program
 to terminate, detach or join with 
 a worker thread
 results in undefined behavior.
+
+\pnum
+\added{%
+The mapping of tasks to worker threads is unspecified,
+except that the code immediately following a task block
+is guaranteed to be executed by the same thread
+as that which executed the code
+immediately preceding that task block.
+The mapping of a task to a worker thread is stable,
+except at spawn or join points.%
+}%
+\footnote{%
+Should the statements of a task block be allowed to execute
+on a different thread than the one that entered the task block?
+}
+
+\begin{note}
+\added{%
+This means, for example,
+that a mutex acquired outside of a task block
+can be neither acquired nor released within the task block,
+since there is no assurance that such an action
+would occur on the same thread (for unlock)
+or on a different thread (for lock).
+}
+\end{note}	
